@@ -17,35 +17,35 @@ import { Button } from "@/shared/ui/button";
 const initialAttendance = [
   {
     workerId: "W001",
-    fullName: "John Doe",
+    fullName: "Aman Amanow",
     date: "2023-05-15",
     checkInTime: "09:00",
     checkOutTime: "17:30",
-    status: "Present",
+    status: "Geldi",
   },
   {
     workerId: "W002",
-    fullName: "Jane Smith",
+    fullName: "Aman Amanow",
     date: "2023-05-15",
     checkInTime: "08:45",
     checkOutTime: "17:15",
-    status: "Present",
+    status: "Geldi",
   },
   {
     workerId: "W003",
-    fullName: "Mike Johnson",
+    fullName: "Aman Amanow",
     date: "2023-05-15",
     checkInTime: "-",
     checkOutTime: "-",
-    status: "Absent",
+    status: "Gija galan",
   },
   {
     workerId: "W004",
-    fullName: "Sarah Williams",
+    fullName: "Aman Amanow",
     date: "2023-05-15",
     checkInTime: "09:15",
     checkOutTime: "16:45",
-    status: "Present",
+    status: "Geldi",
   },
 ];
 
@@ -72,16 +72,16 @@ export function AttendanceTable() {
 
   return (
     <Table>
-      <TableCaption>Attendance record for today.</TableCaption>
+      <TableCaption>Gundelik hasabat.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Worker ID</TableHead>
-          <TableHead>Full Name</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Check-in Time</TableHead>
-          <TableHead>Check-out Time</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead>Isgar ID</TableHead>
+          <TableHead>Ady</TableHead>
+          <TableHead>Giren wagty</TableHead>
+          <TableHead>Gelen wagty</TableHead>
+          <TableHead>Giden wagty</TableHead>
+          <TableHead>Ýagdaýy</TableHead>
+          <TableHead className="text-right">Goşmaçalar</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

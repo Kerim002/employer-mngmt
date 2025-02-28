@@ -17,28 +17,79 @@ import { Button } from "@/shared/ui/button";
 const workers = [
   {
     id: "W001",
-    fullName: "John Doe",
-    position: "Software Engineer",
-    department: "Engineering",
+    fullName: "Meret Meredow",
+    position: "Satyjy",
+    department: "Satyjylyk",
     status: "Active",
     hireDate: "2021-01-15",
   },
   {
     id: "W002",
-    fullName: "Jane Smith",
-    position: "Product Manager",
-    department: "Product",
+    fullName: "Aman Amanow",
+    position: "Önüm Manager",
+    department: "Önüm",
     status: "Active",
     hireDate: "2020-03-22",
   },
   {
     id: "W003",
-    fullName: "Mike Johnson",
-    position: "UX Designer",
-    department: "Design",
-    status: "Inactive",
-    hireDate: "2019-11-05",
+    fullName: "Aman Amanow",
+    position: "Önüm Manager",
+    department: "Önüm",
+    status: "Active",
+    hireDate: "2020-03-22",
   },
+  {
+    id: "W004",
+    fullName: "Aman Amanow",
+    position: "Önüm Manager",
+    department: "Önüm",
+    status: "Inactive",
+    hireDate: "2020-03-22",
+  },
+  {
+    id: "W005",
+    fullName: "Aman Amanow",
+    position: "Önüm Manager",
+    department: "Önüm",
+    status: "Active",
+    hireDate: "2020-03-22",
+  },
+  {
+    id: "W006",
+    fullName: "Aman Amanow",
+    position: "Önüm Manager",
+    department: "Önüm",
+    status: "Active",
+    hireDate: "2020-03-22",
+  },
+  {
+    id: "W007",
+    fullName: "Aman Amanow",
+    position: "Önüm Manager",
+    department: "Önüm",
+    status: "Active",
+    hireDate: "2020-03-22",
+  },
+  {
+    id: "W008",
+    fullName: "Aman Amanow",
+    position: "Önüm Manager",
+    department: "Önüm",
+    status: "Inactive",
+
+    hireDate: "2020-03-22",
+  },
+  {
+    id: "W009",
+    fullName: "Aman Amanow",
+    position: "Önüm Manager",
+    department: "Önüm",
+    status: "Inactive",
+
+    hireDate: "2020-03-22",
+  },
+
   // Add more mock data as needed
 ];
 
@@ -56,16 +107,15 @@ export function WorkersTable() {
 
   return (
     <Table>
-      <TableCaption>A list of all workers.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Worker ID</TableHead>
-          <TableHead>Full Name</TableHead>
-          <TableHead>Position</TableHead>
-          <TableHead>Department</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Hire Date</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead>Isgar ID</TableHead>
+          <TableHead>Ady</TableHead>
+          <TableHead>Wezipesi</TableHead>
+          <TableHead>Bölümi</TableHead>
+          <TableHead>Ýagdaýy</TableHead>
+          <TableHead>Giren wagty</TableHead>
+          <TableHead className="text-right">Goşmaçalar</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

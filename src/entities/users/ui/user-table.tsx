@@ -17,27 +17,27 @@ import { Button } from "@/shared/ui/button";
 const initialUsers = [
   {
     userId: "U001",
-    username: "john_admin",
+    username: "Aman Amanow",
     role: "Admin",
-    email: "john@example.com",
+    email: "amanow@example.com",
   },
   {
     userId: "U002",
-    username: "jane_manager",
+    username: "Aman Amanow",
     role: "Manager",
-    email: "jane@example.com",
+    email: "amanow@example.com",
   },
   {
     userId: "U003",
-    username: "mike_user",
+    username: "Aman Amanow",
     role: "User",
-    email: "mike@example.com",
+    email: "amanow@example.com",
   },
   {
     userId: "U004",
-    username: "sarah_hr",
+    username: "Aman Amanow",
     role: "HR",
-    email: "sarah@example.com",
+    email: "amanow@example.com",
   },
 ];
 
@@ -73,22 +73,21 @@ export function UserManagementTable() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">User Management</h2>
+        <h2 className="text-xl font-semibold">Işçileri dolandyrmak</h2>
         <Button onClick={handleAddUser}>
-          <UserPlus className="mr-2 h-4 w-4" /> Add User
+          <UserPlus className="mr-2 h-4 w-4" /> Işçi goşmak
         </Button>
       </div>
       <Table>
-        <TableCaption>List of system users.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>User ID</TableHead>
-            <TableHead>Username</TableHead>
-            <TableHead>Role</TableHead>
+            <TableHead>Işçi ID</TableHead>
+            <TableHead>Ady</TableHead>
+            <TableHead>Wezipesi</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="text-right">Goşmaçalar</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
