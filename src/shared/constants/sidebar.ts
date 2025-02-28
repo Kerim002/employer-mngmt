@@ -22,18 +22,29 @@ export const sidebarData = {
   ],
   navMain: [
     {
-      title: "Dashboard",
-      url: "/dashboard",
+      title: "Statistika",
+      url: "/",
       icon: LayoutDashboardIcon,
     },
     {
-      title: "Media",
-      url: "/media",
+      title: "Işgärler",
+      url: "/workers",
       icon: FileVideo2,
     },
     {
-      title: "Settings",
-      url: "/settings/order",
+      title: "Hasabat",
+      url: "/attendance",
+      icon: Settings,
+    },
+    {
+      title: "Bölümler",
+      url: "/departments",
+      icon: Settings,
+    },
+
+    {
+      title: "Managment",
+      url: "/users",
       icon: Settings,
     },
   ],

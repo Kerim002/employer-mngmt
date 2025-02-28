@@ -32,7 +32,7 @@ export function TeamSwitcher({
           ></div>
           <div className="grid flex-1 text-left text-sm leading-tight">
             <span className="truncate font-semibold">Admin Panel</span>
-            <span className="truncate text-xs">{"admin"}</span>
+            <span className="truncate text-xs">Gülzemin söwda merkezi</span>
           </div>
         </SidebarMenuButton>
       </SidebarMenuItem>

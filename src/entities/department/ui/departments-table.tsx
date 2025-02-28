@@ -16,26 +16,26 @@ import { Pencil, Trash2 } from "lucide-react";
 const departments = [
   {
     id: "D001",
-    name: "Engineering",
-    managerName: "John Doe",
+    name: "Hasap",
+    managerName: "Aman Amanow",
     employeeCount: 50,
   },
   {
     id: "D002",
     name: "Marketing",
-    managerName: "Jane Smith",
+    managerName: "Aman Amanow",
     employeeCount: 25,
   },
   {
     id: "D003",
-    name: "Human Resources",
-    managerName: "Mike Johnson",
+    name: "Işgärler",
+    managerName: "Aman Amanow",
     employeeCount: 15,
   },
   {
     id: "D004",
-    name: "Finance",
-    managerName: "Sarah Williams",
+    name: "Oba hojalyk",
+    managerName: "Aman Amanow",
     employeeCount: 20,
   },
 ];
@@ -53,14 +53,14 @@ export function DepartmentsTable() {
 
   return (
     <Table>
-      <TableCaption>A list of all departments.</TableCaption>
+      <TableCaption>Ähli bölümler</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead>Department ID</TableHead>
-          <TableHead>Department Name</TableHead>
-          <TableHead>Manager Name</TableHead>
-          <TableHead>Number of Employees</TableHead>
-          <TableHead className="text-right">Actions</TableHead>
+          <TableHead>Bölüm ID</TableHead>
+          <TableHead>Bölüm Id</TableHead>
+          <TableHead>Manager Ady</TableHead>
+          <TableHead>Jemi işçiler</TableHead>
+          <TableHead className="text-right">Goşmaçalar</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
