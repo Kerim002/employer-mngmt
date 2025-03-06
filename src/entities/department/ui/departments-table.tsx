@@ -11,43 +11,18 @@ import {
   Table,
 } from "@/shared/ui/table";
 import { Pencil, Trash2 } from "lucide-react";
-
-// Mock data for departments
-const departments = [
-  {
-    id: "D001",
-    name: "Hasap",
-    managerName: "Aman Amanow",
-    employeeCount: 50,
-  },
-  {
-    id: "D002",
-    name: "Marketing",
-    managerName: "Aman Amanow",
-    employeeCount: 25,
-  },
-  {
-    id: "D003",
-    name: "Işgärler",
-    managerName: "Aman Amanow",
-    employeeCount: 15,
-  },
-  {
-    id: "D004",
-    name: "Oba hojalyk",
-    managerName: "Aman Amanow",
-    employeeCount: 20,
-  },
-];
+import { useDepartmentQuery } from "../api/useDepartmentQuery";
+import { useDepartmentEmployersQuery } from "../api/useDepartmentEmployersQuery";
 
 export function DepartmentsTable() {
+  const { list } = useDepartmentQuery();
+  const { list: employeeCount } = useDepartmentEmployersQuery();
+  console.log(employeeCount);
   const handleEdit = (departmentId: string) => {
-    // Implement edit functionality
     console.log(`Edit department with ID: ${departmentId}`);
   };
 
   const handleDelete = (departmentId: string) => {
-    // Implement delete functionality
     console.log(`Delete department with ID: ${departmentId}`);
   };
 
@@ -64,9 +39,9 @@ export function DepartmentsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {departments.map((department) => (
+        {list?.map((department, index) => (
           <TableRow key={department.id}>
-            <TableCell className="font-medium">{department.id}</TableCell>
+            <TableCell className="font-medium">{index + 1}</TableCell>
             <TableCell>{department.name}</TableCell>
             <TableCell>{department.managerName}</TableCell>
             <TableCell>{department.employeeCount}</TableCell>
