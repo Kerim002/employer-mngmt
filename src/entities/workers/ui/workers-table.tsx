@@ -12,6 +12,7 @@ import {
 } from "@/shared/ui/table";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
+import { useEmployerListQuery } from "@/entities/users/api/useEmployerListQuery";
 
 // This is mock data. In a real application, you'd fetch this from an API.
 const workers = [
@@ -95,7 +96,7 @@ const workers = [
 
 export function WorkersTable() {
   const [workersData, setWorkersData] = useState(workers);
-
+  const { list, total } = useEmployerListQuery();
   const handleEdit = (workerId: string) => {
     // Implement edit functionality
     console.log(`Edit worker with ID: ${workerId}`);
@@ -119,24 +120,24 @@ export function WorkersTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {workersData.map((worker) => (
+        {list?.map((worker, index) => (
           <TableRow key={worker.id}>
-            <TableCell className="font-medium">{worker.id}</TableCell>
+            <TableCell className="font-medium">{index + 1}</TableCell>
             <TableCell>{worker.fullName}</TableCell>
-            <TableCell>{worker.position}</TableCell>
-            <TableCell>{worker.department}</TableCell>
+            <TableCell>{worker.job.name}</TableCell>
+            <TableCell>{worker.department.name}</TableCell>
             <TableCell>
               <span
                 className={`px-2 py-1 rounded-full text-xs ${
-                  worker.status === "Active"
+                  worker.state === "active"
                     ? "bg-green-200 text-green-800"
                     : "bg-red-200 text-red-800"
                 }`}
               >
-                {worker.status}
+                {worker.state}
               </span>
             </TableCell>
-            <TableCell>{worker.hireDate}</TableCell>
+            <TableCell>{new Date(worker.updatedAt).toISOString()}</TableCell>
             <TableCell className="text-right">
               <Button
                 variant="ghost"

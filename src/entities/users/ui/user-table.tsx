@@ -12,8 +12,8 @@ import {
 } from "@/shared/ui/table";
 import { Pencil, Trash2, UserPlus } from "lucide-react";
 import { Button } from "@/shared/ui/button";
+import { useEmployerListQuery } from "../api/useEmployerListQuery";
 
-// Mock data for users
 const initialUsers = [
   {
     userId: "U001",
@@ -42,20 +42,18 @@ const initialUsers = [
 ];
 
 export function UserManagementTable() {
+  const { list, total } = useEmployerListQuery();
   const [users, setUsers] = useState(initialUsers);
 
   const handleEdit = (userId: string) => {
-    // Implement edit functionality
     console.log(`Edit user with ID: ${userId}`);
   };
 
   const handleDelete = (userId: string) => {
-    // Implement delete functionality
     setUsers(users.filter((user) => user.userId !== userId));
   };
 
   const handleAddUser = () => {
-    // Implement add user functionality
     console.log("Add new user");
   };
 
@@ -91,17 +89,17 @@ export function UserManagementTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => (
-            <TableRow key={user.userId}>
-              <TableCell className="font-medium">{user.userId}</TableCell>
-              <TableCell>{user.username}</TableCell>
+          {list?.map((user, index) => (
+            <TableRow key={user.id}>
+              <TableCell className="font-medium">{index + 1}</TableCell>
+              <TableCell>{user.fullName}</TableCell>
               <TableCell>
                 <span
                   className={`px-2 py-1 rounded-full text-xs ${getRoleColor(
-                    user.role
+                    user.job.name
                   )}`}
                 >
-                  {user.role}
+                  {user.job.name}
                 </span>
               </TableCell>
               <TableCell>{user.email}</TableCell>
@@ -109,14 +107,14 @@ export function UserManagementTable() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => handleEdit(user.userId)}
+                  onClick={() => handleEdit(user.id)}
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => handleDelete(user.userId)}
+                  onClick={() => handleDelete(user.id)}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
