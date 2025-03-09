@@ -29,6 +29,7 @@ const formSchema = z.object({
   job: z.string().min(2, {
     message: "In az 2 harp bolmaly",
   }),
+  phone: z.string().min(2, { message: "In az 2 harp bolmaly" }),
   status: z.enum(["active", "passive"]),
 });
 
@@ -40,12 +41,14 @@ export const WorkersDialog = () => {
     defaultValues: {
       name: "",
       job: "",
+      phone: "",
       status: "passive",
     },
   });
 
   function onSubmit(values: FormSchemaType) {
-    console.log(values);
+    try {
+    } catch (error) {}
   }
   return (
     <DialogContent>
@@ -71,6 +74,19 @@ export const WorkersDialog = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Isin gornusi</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Telefon belgisi</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
