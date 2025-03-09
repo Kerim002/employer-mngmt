@@ -13,12 +13,11 @@ model Employer {
   updatedAt    DateTime     @default(now()) @map("updated_at")
   phone        String
   fullName     String
-  job          Job          @relation("job_employers", fields: [jobId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  jobId        String
-  departmentId String
+  jobs         Job?         @relation("job_employers", fields: [jobId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  jobId        String?
+  departmentId String?
   department   Department?  @relation("department_employers", fields: [departmentId], references: [id], onUpdate: Cascade)
   state        State
-  email        String       @unique
   departments  Department[]
 }
 
