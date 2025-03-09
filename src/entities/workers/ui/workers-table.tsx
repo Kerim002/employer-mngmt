@@ -12,7 +12,7 @@ import {
 } from "@/shared/ui/table";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { useEmployerListQuery } from "@/entities/users/api/useEmployerListQuery";
+import { WorkersRow } from "@/widget";
 
 // This is mock data. In a real application, you'd fetch this from an API.
 const workers = [
@@ -96,15 +96,14 @@ const workers = [
 
 export function WorkersTable() {
   const [workersData, setWorkersData] = useState(workers);
-  const { list, total } = useEmployerListQuery();
-  const handleEdit = (workerId: string) => {
-    // Implement edit functionality
-    console.log(`Edit worker with ID: ${workerId}`);
-  };
 
-  const handleDelete = (workerId: string) => {
-    setWorkersData(workersData.filter((worker) => worker.id !== workerId));
-  };
+  // const handleEdit = (workerId: string) => {
+  //   console.log(`Edit worker with ID: ${workerId}`);
+  // };
+
+  // const handleDelete = (workerId: string) => {
+  //   setWorkersData(workersData.filter((worker) => worker.id !== workerId));
+  // };
 
   return (
     <Table>
@@ -120,41 +119,8 @@ export function WorkersTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {list?.map((worker, index) => (
-          <TableRow key={worker.id}>
-            <TableCell className="font-medium">{index + 1}</TableCell>
-            <TableCell>{worker.fullName}</TableCell>
-            <TableCell>{worker.job.name}</TableCell>
-            <TableCell>{worker.department.name}</TableCell>
-            <TableCell>
-              <span
-                className={`px-2 py-1 rounded-full text-xs ${
-                  worker.state === "active"
-                    ? "bg-green-200 text-green-800"
-                    : "bg-red-200 text-red-800"
-                }`}
-              >
-                {worker.state}
-              </span>
-            </TableCell>
-            <TableCell>{new Date(worker.updatedAt).toISOString()}</TableCell>
-            <TableCell className="text-right">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleEdit(worker.id)}
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleDelete(worker.id)}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </TableCell>
-          </TableRow>
+        {workersData.map((worker) => (
+          <WorkersRow key={worker.id} worker={worker} />
         ))}
       </TableBody>
     </Table>
