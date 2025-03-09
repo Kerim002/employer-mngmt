@@ -114,7 +114,7 @@ export function WorkersTable() {
           <TableHead>Wezipesi</TableHead>
           <TableHead>Bölümi</TableHead>
           <TableHead>Ýagdaýy</TableHead>
-          <TableHead>Giren wagty</TableHead>
+          <TableHead>Ise giren wagty</TableHead>
           <TableHead className="text-right">Goşmaçalar</TableHead>
         </TableRow>
       </TableHeader>
