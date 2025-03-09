@@ -1,3 +1,2 @@
-import { useTable } from "./useTable";
-
-export { useTable };
+export { useTable } from "./useTable";
+export { useQueryParam } from "./useQueryParam";

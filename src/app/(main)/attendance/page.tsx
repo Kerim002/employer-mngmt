@@ -1,8 +1,8 @@
-import { AttendanceTable } from "@/entities/attendance/ui/attendance-table";
+import { AttendancePage } from "@/views/attendance";
 import React from "react";
 
 const Attendance = () => {
-  return <AttendanceTable />;
+  return <AttendancePage />;
 };
 
 export default Attendance;
