@@ -1,5 +1,9 @@
 "use client";
-import { DialogContent, DialogTitle } from "@/shared/ui/dialog";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/shared/ui/dialog";
 import {
   Form,
   FormControl,
@@ -8,8 +12,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui/form";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useEffect } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/shared/ui/input";
@@ -21,6 +25,9 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 import { Button } from "@/shared/ui/button";
+import { useCreateEmployer } from "@/entities/workers";
+import { $Enums } from "@prisma/client";
+import { useQueryParam } from "@/shared/hook";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -30,29 +37,57 @@ const formSchema = z.object({
     message: "In az 2 harp bolmaly",
   }),
   phone: z.string().min(2, { message: "In az 2 harp bolmaly" }),
-  status: z.enum(["active", "passive"]),
+  status: z.enum(["active", "inactive"]),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
-
+type FormErrorType = "name" | "job" | "phone" | "status";
 export const WorkersDialog = () => {
+  const { getQuery } = useQueryParam();
+  const { handleCreateWorker, isPending } = useCreateEmployer();
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       job: "",
       phone: "",
-      status: "passive",
+      status: "inactive",
     },
   });
-
-  function onSubmit(values: FormSchemaType) {
+  useEffect(() => {
+    return () => {
+      form.reset({
+        name: "",
+        job: "",
+        phone: "",
+        status: "inactive",
+      });
+    };
+  }, [getQuery("isModal")]);
+  const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
     try {
-    } catch (error) {}
-  }
+      formSchema.parse(values);
+      handleCreateWorker({
+        fullName: values.name,
+        job: values.job,
+        phone: values.phone,
+        state: values.status as $Enums.State,
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        error.errors.forEach((err) => {
+          const errorPath = err.path[0] as FormErrorType;
+          form.setError(errorPath, { message: err.message });
+        });
+      } else {
+        console.error("Неизвестная ошибка:", error);
+      }
+    }
+  };
   return (
     <DialogContent>
-      <DialogTitle />
+      <DialogTitle hidden />
+      <DialogDescription hidden></DialogDescription>
       <Form {...form}>
         <form className="space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
@@ -111,17 +146,18 @@ export const WorkersDialog = () => {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="active">Isjen</SelectItem>
-                    <SelectItem value="passive">Isjen dal</SelectItem>
+                    <SelectItem value="inactive">Isjen dal</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">
+          <Button disabled={isPending} className="w-full" type="submit">
             Submit
           </Button>
         </form>
+        <FormMessage />
       </Form>
     </DialogContent>
   );

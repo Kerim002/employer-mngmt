@@ -1,50 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/shared/ui/table";
-import { Pencil, Trash2, UserPlus } from "lucide-react";
-import { Button } from "@/shared/ui/button";
+import { useEmployerListQuery } from "../api/useEmployerListQuery";
 import { UsersRow } from "@/widget";
 
-const initialUsers = [
-  {
-    userId: "U001",
-    username: "Aman Amanow",
-    role: "Admin",
-    email: "amanow@example.com",
-  },
-  {
-    userId: "U002",
-    username: "Aman Amanow",
-    role: "Manager",
-    email: "amanow@example.com",
-  },
-  {
-    userId: "U003",
-    username: "Aman Amanow",
-    role: "User",
-    email: "amanow@example.com",
-  },
-  {
-    userId: "U004",
-    username: "Aman Amanow",
-    role: "HR",
-    email: "amanow@example.com",
-  },
-];
-
 export function UserManagementTable() {
-  const { list, total } = useEmployerListQuery();
-  const [users, setUsers] = useState(initialUsers);
-
+  const { list } = useEmployerListQuery({});
   return (
     <Table>
       <TableHeader>
@@ -52,13 +19,13 @@ export function UserManagementTable() {
           <TableHead>Işçi ID</TableHead>
           <TableHead>Ady</TableHead>
           <TableHead>Wezipesi</TableHead>
-          <TableHead>Email</TableHead>
+          <TableHead>Manager</TableHead>
           <TableHead className="text-right">Goşmaçalar</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {users.map((user) => (
-          <UsersRow key={user.userId} user={user} />
+        {list?.map((user, index) => (
+          <UsersRow key={user.id} index={index + 1} user={user} />
         ))}
       </TableBody>
     </Table>

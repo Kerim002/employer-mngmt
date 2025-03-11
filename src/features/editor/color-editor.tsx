@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Toggle } from "@/shared/ui/toggle";
 import { type Editor } from "@tiptap/react";
-import { EllipsisVertical, Highlighter } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 const ColorEditor = ({ editor }: { editor: Editor | null }) => {
   const [color, setColor] = useState<string>("#ffff00");
   if (!editor) {

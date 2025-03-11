@@ -4,14 +4,11 @@ import { useState } from "react";
 import {
   TableBody,
   TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
   Table,
 } from "@/shared/ui/table";
-import { Pencil } from "lucide-react";
-import { Button } from "@/shared/ui/button";
 import { AttendanceRow } from "@/widget";
 
 // Mock data for attendance

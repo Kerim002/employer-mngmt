@@ -1,7 +1,7 @@
 "use server";
 import prisma from "@/shared/lib/db";
 
-export const employerList = async ({
+export const actionWorkerList = async ({
   page = 1,
   pageSize = 10,
 }: PrismaPagination) => {
@@ -9,10 +9,9 @@ export const employerList = async ({
     const [total, data] = await Promise.all([
       prisma.employer.count(),
       prisma.employer.findMany({
-        where: { jobId: { not: null }, departmentId: { not: null } },
         include: {
           jobs: true,
-          department: { include: { manager: true } },
+          department: true,
         },
         skip: (page - 1) * pageSize,
         take: pageSize,
@@ -22,13 +21,17 @@ export const employerList = async ({
     const list = data.map((item) => ({
       fullName: item.fullName,
       job: item.jobs ? { name: item.jobs.name, id: item.jobs.id } : null,
-      manager: item.department?.manager?.fullName,
+      department: item.department
+        ? { name: item.department.name, id: item.department.id }
+        : null,
+      state: item.state,
       id: item.id,
+      createdAt: item.createdAt,
     }));
 
     return { total, list };
   } catch (error) {
-    console.error(error);
+    console.log(error);
     throw error;
   }
 };

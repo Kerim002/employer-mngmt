@@ -1,39 +1,48 @@
 import { QueryEditBtn } from "@/features/button";
 import { Button } from "@/shared/ui/button";
 import { TableCell, TableRow } from "@/shared/ui/table";
+import { $Enums } from "@prisma/client";
+import { format } from "date-fns";
 import { Trash2 } from "lucide-react";
 import React from "react";
 
 type Props = {
   worker: {
-    id: string;
     fullName: string;
-    position: string;
-    department: string;
-    hireDate: string;
-    status: string;
+    job: {
+      name: string;
+      id: string;
+    } | null;
+    department: {
+      name: string;
+      id: string;
+    } | null;
+    state: $Enums.State;
+    id: string;
+    createdAt: Date;
   };
+  index: number;
 };
 
-export const WorkersRow = ({ worker }: Props) => {
+export const WorkersRow = ({ worker, index }: Props) => {
   return (
     <TableRow key={worker.id}>
-      <TableCell className="font-medium">{worker.id}</TableCell>
+      <TableCell className="font-medium">{index}</TableCell>
       <TableCell>{worker.fullName}</TableCell>
-      <TableCell>{worker.position}</TableCell>
-      <TableCell>{worker.department}</TableCell>
+      <TableCell>{worker.job?.name}</TableCell>
+      <TableCell>{worker.department?.name}</TableCell>
       <TableCell>
         <span
           className={`px-2 py-1 rounded-full text-xs ${
-            worker.status === "Active"
+            worker.state === "active"
               ? "bg-green-200 text-green-800"
               : "bg-red-200 text-red-800"
           }`}
         >
-          {worker.status}
+          {worker.state}
         </span>
       </TableCell>
-      <TableCell>{worker.hireDate}</TableCell>
+      <TableCell>{format(worker.createdAt, "dd.MM.yyyy")}</TableCell>
       <TableCell className="text-right space-x-2">
         <QueryEditBtn
           queries={[

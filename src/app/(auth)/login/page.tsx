@@ -9,7 +9,6 @@ import {
 } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
-import Link from "next/link";
 import React from "react";
 
 const Login = () => {

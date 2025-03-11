@@ -2,11 +2,16 @@
 import prisma from "@/shared/lib/db";
 
 export const departmentId = async (id: string) => {
-  return await prisma.department.findFirst({
-    where: { id },
-    include: {
-      employers: true,
-      manager: true,
-    },
-  });
+  try {
+    return await prisma.department.findFirst({
+      select: {
+        id: true,
+        name: true,
+        manager: { select: { fullName: true, id: true } },
+      },
+      where: { id },
+    });
+  } catch (error) {
+    throw error;
+  }
 };

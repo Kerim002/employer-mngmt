@@ -6,10 +6,14 @@ import React from "react";
 
 type Props = {
   department: {
+    count: number;
+    manager: {
+      id: string;
+      fullName: string;
+    } | null;
     id: string;
     name: string;
-    employeeCount: number;
-    managerName?: string;
+    createdAt: Date;
   };
   index: number;
 };
@@ -18,8 +22,8 @@ export const DepartmentRow = ({ department, index }: Props) => {
     <TableRow key={department.id}>
       <TableCell className="font-medium">{index + 1}</TableCell>
       <TableCell>{department.name}</TableCell>
-      <TableCell>{department.managerName}</TableCell>
-      <TableCell>{department.employeeCount}</TableCell>
+      <TableCell>{department.manager?.fullName}</TableCell>
+      <TableCell>{department.count}</TableCell>
       <TableCell className="text-right space-x-2">
         <QueryEditBtn
           queries={[
@@ -27,11 +31,7 @@ export const DepartmentRow = ({ department, index }: Props) => {
             { key: "id", value: department.id },
           ]}
         />
-        <Button
-          variant="destructive"
-          size="icon"
-          //   onClick={() => handleDelete(department.id)}
-        >
+        <Button variant="destructive" size="icon">
           <Trash2 className="h-4 w-4" />
         </Button>
       </TableCell>

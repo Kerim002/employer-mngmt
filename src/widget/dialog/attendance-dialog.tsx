@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/shared/ui/form";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/shared/ui/input";

@@ -9,12 +9,10 @@ import {
   Table,
 } from "@/shared/ui/table";
 import { useDepartmentQuery } from "../api/useDepartmentQuery";
-import { useDepartmentEmployersQuery } from "../api/useDepartmentEmployersQuery";
 import { DepartmentRow } from "@/widget";
 
 export function DepartmentsTable() {
   const { list } = useDepartmentQuery();
-  const { list: employeeCount } = useDepartmentEmployersQuery();
   // const handleEdit = (departmentId: string) => {
   //   console.log(`Edit department with ID: ${departmentId}`);
   // };
