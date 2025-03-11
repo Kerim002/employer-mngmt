@@ -9,7 +9,8 @@ export const useCreateEmployer = () => {
   const { mutate, data, isPending } = useMutation({
     mutationKey: ["employer"],
     mutationFn: async (payload: EmployerPayloadSchema) => {
-      return actionWorkerCreate(payload);
+      console.log(payload);
+      return actionWorkerCreate({ ...payload, id: undefined });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["worker"] });

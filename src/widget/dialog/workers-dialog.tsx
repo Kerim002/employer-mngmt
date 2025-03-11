@@ -1,5 +1,6 @@
 "use client";
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -12,8 +13,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui/form";
-import React, { useEffect } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import React, { useEffect, useRef } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/shared/ui/input";
@@ -43,6 +44,7 @@ const formSchema = z.object({
 type FormSchemaType = z.infer<typeof formSchema>;
 type FormErrorType = "name" | "job" | "phone" | "status";
 export const WorkersDialog = () => {
+  const closeRef = useRef<HTMLButtonElement>(null);
   const { getQuery } = useQueryParam();
   const { handleCreateWorker, isPending } = useCreateEmployer();
   const form = useForm<FormSchemaType>({
@@ -67,12 +69,19 @@ export const WorkersDialog = () => {
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
     try {
       formSchema.parse(values);
-      handleCreateWorker({
-        fullName: values.name,
-        job: values.job,
-        phone: values.phone,
-        state: values.status as $Enums.State,
-      });
+      handleCreateWorker(
+        {
+          fullName: values.name,
+          job: values.job,
+          phone: values.phone,
+          state: values.status as $Enums.State,
+        },
+        {
+          onSuccess: () => {
+            closeRef.current?.click();
+          },
+        }
+      );
     } catch (error) {
       if (error instanceof z.ZodError) {
         error.errors.forEach((err) => {
@@ -159,6 +168,7 @@ export const WorkersDialog = () => {
         </form>
         <FormMessage />
       </Form>
+      <DialogClose ref={closeRef} />
     </DialogContent>
   );
 };

@@ -3,7 +3,7 @@ import prisma from "@/shared/lib/db";
 
 export const actionWorkerList = async ({
   page = 1,
-  pageSize = 10,
+  pageSize = 1000,
 }: PrismaPagination) => {
   try {
     const [total, data] = await Promise.all([

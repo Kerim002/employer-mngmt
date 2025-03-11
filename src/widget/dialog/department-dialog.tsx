@@ -1,5 +1,6 @@
 "use client";
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -12,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui/form";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,9 +46,12 @@ type FormSchemaType = z.infer<typeof formSchema>;
 type FormErrorType = "name" | "manager";
 
 export const DepartmentDialog = () => {
+  const closeRef = useRef<HTMLButtonElement>(null);
   const { getQuery } = useQueryParam();
+  const departmentId = getQuery("id");
   const { list } = useDepartmentEmployersQuery();
   const { handleCreateDepartment, isPending } = useCreateDepartmentMutation();
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,24 +59,29 @@ export const DepartmentDialog = () => {
       manager: "",
     },
   });
-  const { department } = useDepartmentIdQuery(getQuery("id"));
+
+  const { department } = useDepartmentIdQuery(departmentId);
+
   useEffect(() => {
-    console.log(department);
-    form.reset({
-      name: department?.name,
-      manager: department?.manager?.id,
-    });
-    return () => {
+    if (department) {
       form.reset({
-        name: "",
-        manager: "",
+        name: department.name || "",
+        manager: department.manager?.id || "",
       });
-    };
-  }, [getQuery("isModal"), getQuery("id"), isPending]);
+    }
+  }, [department]);
+
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
     try {
       formSchema.parse(values);
-      handleCreateDepartment({ managerId: values.manager, name: values.name });
+      handleCreateDepartment(
+        { managerId: values.manager, name: values.name },
+        {
+          onSuccess: () => {
+            closeRef.current?.click();
+          },
+        }
+      );
     } catch (error) {
       if (error instanceof z.ZodError) {
         error.errors.forEach((err) => {
@@ -115,7 +124,7 @@ export const DepartmentDialog = () => {
                 <FormLabel>Menageri sayla</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value} // Ensure controlled component
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -139,6 +148,7 @@ export const DepartmentDialog = () => {
           </Button>
         </form>
       </Form>
+      <DialogClose ref={closeRef} />
     </DialogContent>
   );
 };

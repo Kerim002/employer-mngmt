@@ -1,3 +1,4 @@
+import { useDeleteWorker } from "@/entities/workers/api/useDeleteWorker";
 import { QueryEditBtn } from "@/features/button";
 import { Button } from "@/shared/ui/button";
 import { TableCell, TableRow } from "@/shared/ui/table";
@@ -25,12 +26,13 @@ type Props = {
 };
 
 export const WorkersRow = ({ worker, index }: Props) => {
+  const { handleDeleteWorker } = useDeleteWorker();
   return (
     <TableRow key={worker.id}>
       <TableCell className="font-medium">{index}</TableCell>
       <TableCell>{worker.fullName}</TableCell>
       <TableCell>{worker.job?.name}</TableCell>
-      <TableCell>{worker.department?.name}</TableCell>
+      {/* <TableCell>{worker.department?.name}</TableCell> */}
       <TableCell>
         <span
           className={`px-2 py-1 rounded-full text-xs ${
@@ -44,13 +46,17 @@ export const WorkersRow = ({ worker, index }: Props) => {
       </TableCell>
       <TableCell>{format(worker.createdAt, "dd.MM.yyyy")}</TableCell>
       <TableCell className="text-right space-x-2">
-        <QueryEditBtn
+        {/* <QueryEditBtn
           queries={[
             { key: "isModal", value: "true" },
             { key: "id", value: worker.id },
           ]}
-        />
-        <Button variant="destructive" size="icon">
+        /> */}
+        <Button
+          onClick={() => handleDeleteWorker(worker.id)}
+          variant="destructive"
+          size="icon"
+        >
           <Trash2 className="h-4 w-4" />
         </Button>
       </TableCell>

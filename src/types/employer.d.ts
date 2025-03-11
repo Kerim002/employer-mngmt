@@ -3,7 +3,7 @@ import { $Enums } from "@prisma/client";
 type EmployerPayloadSchema = {
   fullName: string;
   phone: string;
-  state: $Enums.State;
+  state: "active" | "inactive";
   job: string;
   id?: string;
 };

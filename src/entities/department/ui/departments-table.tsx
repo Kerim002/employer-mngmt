@@ -13,13 +13,6 @@ import { DepartmentRow } from "@/widget";
 
 export function DepartmentsTable() {
   const { list } = useDepartmentQuery();
-  // const handleEdit = (departmentId: string) => {
-  //   console.log(`Edit department with ID: ${departmentId}`);
-  // };
-
-  // const handleDelete = (departmentId: string) => {
-  //   console.log(`Delete department with ID: ${departmentId}`);
-  // };
 
   return (
     <Table>

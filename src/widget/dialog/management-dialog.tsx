@@ -1,5 +1,6 @@
 "use client";
 import {
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
@@ -12,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui/form";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,6 +52,7 @@ export const ManagementDialog = () => {
   const { workerList } = useWorkerDepartmentListQuery();
   const { departmentList } = useDepartmentWorkerListQuery();
   const { worker } = useEmployerIdQuery(getQuery("id"));
+  const closeRef = useRef<HTMLButtonElement>(null);
   const { handleWorkerJoinDepartment, isPending } =
     useWorkerJoinDepartmentMutation();
   const form = useForm<FormSchemaType>({
@@ -66,20 +68,21 @@ export const ManagementDialog = () => {
       name: worker?.id,
       departmentId: worker?.departmentId ?? "",
     });
-    return () => {
-      form.reset({
-        name: "",
-        departmentId: "",
-      });
-    };
-  }, [getQuery("isModal"), getQuery("id")]);
+  }, [worker, departmentList, workerList]);
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
     try {
       formSchema.parse(values);
-      handleWorkerJoinDepartment({
-        departmentId: values.departmentId,
-        id: values.name,
-      });
+      handleWorkerJoinDepartment(
+        {
+          departmentId: values.departmentId,
+          id: values.name,
+        },
+        {
+          onSuccess: () => {
+            closeRef.current?.click();
+          },
+        }
+      );
     } catch (error) {
       if (error instanceof z.ZodError) {
         error.errors.forEach((err) => {
@@ -105,14 +108,14 @@ export const ManagementDialog = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Menageri sayla</FormLabel>
+                <FormLabel>Isgari sayla</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Menageri sayla" />
+                      <SelectValue placeholder="Isgari sayla" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -132,14 +135,14 @@ export const ManagementDialog = () => {
             name="departmentId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Menageri sayla</FormLabel>
+                <FormLabel>Bolumi sayla</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Menageri sayla" />
+                      <SelectValue placeholder="Bolumi sayla" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -159,6 +162,7 @@ export const ManagementDialog = () => {
           </Button>
         </form>
       </Form>
+      <DialogClose ref={closeRef} />
     </DialogContent>
   );
 };

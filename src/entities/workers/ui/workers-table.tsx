@@ -19,7 +19,7 @@ export function WorkersTable() {
           <TableHead>Isgar ID</TableHead>
           <TableHead>Ady</TableHead>
           <TableHead>Wezipesi</TableHead>
-          <TableHead>Bölümi</TableHead>
+          {/* <TableHead>Bölümi</TableHead> */}
           <TableHead>Ýagdaýy</TableHead>
           <TableHead>Ise giren wagty</TableHead>
           <TableHead className="text-right">Goşmaçalar</TableHead>
