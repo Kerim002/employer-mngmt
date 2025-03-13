@@ -51,7 +51,6 @@ export function AttendanceTable() {
   const [attendance, setAttendance] = useState(initialAttendance);
 
   const handleEdit = (workerId: string) => {
-    // Implement edit functionality
     console.log(`Edit attendance for worker with ID: ${workerId}`);
   };
 

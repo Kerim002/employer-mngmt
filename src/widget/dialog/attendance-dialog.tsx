@@ -12,7 +12,6 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
@@ -20,21 +19,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
+import { useDepartmentEmployersQuery } from "@/entities/department";
+
+import { FormDatePicker } from "@/shared/ui/components/form-date-picker";
 const formSchema = z.object({
-  name: z.string().min(2, {
+  employerId: z.string().min(2, {
     message: "In az 2 harp bolmaly",
   }),
-  manager: z.string().min(2, {
-    message: "Birin sayla",
+  state: z.enum(["girdi", "çykdy", "gijä galdy"], {
+    message: "hokman birini saylamaly",
   }),
+  enterAt: z.date(),
 });
 type FormSchemaType = z.infer<typeof formSchema>;
 
 export const AttendanceDialog = () => {
+  const { list } = useDepartmentEmployersQuery();
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      employerId: "",
+      // state: "",
     },
   });
 
@@ -45,45 +50,36 @@ export const AttendanceDialog = () => {
     <DialogContent>
       <DialogTitle />
       <Form {...form}>
-        <form className="" onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Department ady</FormLabel>
+        {/* <form className="" onSubmit={form.handleSubmit(onSubmit)}> */}
+        <FormField
+          control={form.control}
+          name="employerId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Menageri sayla</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value} // Ensure controlled component
+              >
                 <FormControl>
-                  <Input {...field} />
+                  <SelectTrigger>
+                    <SelectValue placeholder="Menageri sayla" />
+                  </SelectTrigger>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="manager"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Menageri sayla</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Menageri sayla" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="M">Dowran</SelectItem>
-                    <SelectItem value="F">Temur</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </form>
+                <SelectContent>
+                  {list?.map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      {item.fullName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormDatePicker form={form} name="enterAt" />
+        {/* </form> */}
       </Form>
     </DialogContent>
   );
