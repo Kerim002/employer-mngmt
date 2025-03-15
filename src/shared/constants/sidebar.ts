@@ -2,7 +2,10 @@ import {
   FileVideo2,
   GalleryVerticalEnd,
   LayoutDashboardIcon,
+  LayoutPanelTop,
   MapPin,
+  MessageSquareWarning,
+  Pickaxe,
   Settings,
   Settings2Icon,
 } from "lucide-react";
@@ -29,17 +32,17 @@ export const sidebarData = {
     {
       title: "Işgärler",
       url: "/workers",
-      icon: FileVideo2,
+      icon: Pickaxe,
     },
     {
       title: "Hasabat",
       url: "/attendance",
-      icon: Settings,
+      icon: MessageSquareWarning,
     },
     {
       title: "Bölümler",
       url: "/departments",
-      icon: Settings,
+      icon: LayoutPanelTop,
     },
 
     {
