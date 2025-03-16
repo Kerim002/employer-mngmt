@@ -13,7 +13,7 @@ export const AttendancePage = () => {
   return (
     <div className="flex flex-col w-full">
       <div className="w-full flex justify-end">
-        <QueryModalBtn>Create</QueryModalBtn>
+        <QueryModalBtn>Doretmek</QueryModalBtn>
       </div>
       <AttendanceTable />
       <DialogProvider>

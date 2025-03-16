@@ -69,7 +69,7 @@ export const DepartmentDialog = () => {
         manager: department.manager?.id || "",
       });
     }
-  }, [department]);
+  }, [department, form]);
 
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
     try {

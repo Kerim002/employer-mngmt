@@ -68,7 +68,7 @@ export const ManagementDialog = () => {
       name: worker?.id,
       departmentId: worker?.departmentId ?? "",
     });
-  }, [worker, departmentList, workerList]);
+  }, [worker, departmentList, workerList, form]);
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
     try {
       formSchema.parse(values);
