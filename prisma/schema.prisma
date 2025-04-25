@@ -54,3 +54,16 @@ model Attendance {
   state      String
   employerId String
 }
+
+model Product {
+  id           String   @id @default(cuid())
+  name         String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @map("updated_at")
+  image        String
+  primaryPrice Float
+  price        Float
+  profit       Float
+  count        Int
+  type         String
+}
