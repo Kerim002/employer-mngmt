@@ -7,10 +7,13 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
 
-  const title = (formData.get("title") as string) || null;
-  const content = (formData.get("content") as string) || null;
+  const name = (formData.get("name") as string) || null;
+  const price = (Number(formData.get("price")) as number) || null;
+  const count = (Number(formData.get("count")) as number) || null;
+  const primaryPrice =
+    (Number(formData.get("primary_price")) as number) || null;
+  const type = (formData.get("type") as string) || null;
   const image = (formData.get("image") as File) || null;
-
   const buffer = Buffer.from(await image.arrayBuffer());
   const relativeUploadDir = `/uploads/${new Date(Date.now())
     .toLocaleDateString("id-ID", {
@@ -50,11 +53,15 @@ export async function POST(req: NextRequest) {
     const fileUrl = `${relativeUploadDir}/${filename}`;
 
     // Save to database
-    const result = await prisma..create({
+    const result = await prisma.product.create({
       data: {
-        title,
-        content,
+        name: name ?? "",
+        count: count ?? 0,
+        price: price ?? 0,
+        primaryPrice: primaryPrice ?? 0,
+        type: type ?? "",
         image: fileUrl,
+        profit: price ? price - (primaryPrice ?? 0) : 0,
       },
     });
 
