@@ -1,7 +1,14 @@
 import { ProductTable } from "@/entities/products/ui/product-table";
 import { QueryModalBtn } from "@/features/button";
+import { ProductDialog } from "@/widget";
+import dynamic from "next/dynamic";
 import React from "react";
-
+const DialogProvider = dynamic(
+  () => import("@/widget").then((mod) => mod.DialogProvider),
+  {
+    loading: () => <></>,
+  }
+);
 type Props = {
   type: "milk" | "meat" | "foodstuffs";
 };
@@ -13,9 +20,9 @@ const ProductPage = ({ type }: Props) => {
         <QueryModalBtn>Create</QueryModalBtn>
       </div>
       <ProductTable type={type} />
-      {/* <DialogProvider>
-        <ManagementDialog />
-      </DialogProvider> */}
+      <DialogProvider>
+        <ProductDialog />
+      </DialogProvider>
     </div>
   );
 };

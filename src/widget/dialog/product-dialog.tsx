@@ -62,7 +62,9 @@ export const ProductDialog = () => {
       });
     };
   }, [getQuery("isModal")]);
-  const onSubmit: SubmitHandler<FormSchemaType> = (values) => {};
+  const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
+    console.log(values);
+  };
   return (
     <DialogContent>
       <DialogTitle hidden />
@@ -77,6 +79,32 @@ export const ProductDialog = () => {
                 <FormLabel>Harydyň ady</FormLabel>
                 <FormControl>
                   <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="price"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Alanan bahasy</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="sellprice"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Satylmaly bahasy</FormLabel>
+                <FormControl>
+                  <Input type="number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
