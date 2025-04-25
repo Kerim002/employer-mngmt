@@ -3,6 +3,11 @@ type SidebarItemSchema = {
   url: string;
   icon?: LucideIcon;
   isActive?: boolean;
+  isDropdown?: boolean;
+  items?: {
+    title: string;
+    url: string;
+  }[];
 };
 type SidebarUserItemSchema = {
   name: string;

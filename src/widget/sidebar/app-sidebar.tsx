@@ -11,7 +11,6 @@ import {
 } from "@/shared/ui/sidebar";
 import { sidebarData } from "@/shared/constants";
 import { NavMain } from "./nav-main";
-import { NavUser } from "./nav-user";
 import { TeamSwitcher } from "./team-switcher";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

@@ -8,6 +8,7 @@ import {
   Pickaxe,
   Settings,
   Settings2Icon,
+  Sprout,
 } from "lucide-react";
 
 export const sidebarData = {
@@ -33,6 +34,26 @@ export const sidebarData = {
       title: "Işgärler",
       url: "/workers",
       icon: Pickaxe,
+    },
+    {
+      title: "Harytlar",
+      url: "/products",
+      icon: Sprout,
+      isDropdown: true,
+      items: [
+        {
+          title: "Et önümleri",
+          url: "/product/meat",
+        },
+        {
+          title: "Süýt önümleri",
+          url: "/product/milk",
+        },
+        {
+          title: "Azyk harytlar",
+          url: "/product/foodstuffs",
+        },
+      ],
     },
     {
       title: "Hasabat",
