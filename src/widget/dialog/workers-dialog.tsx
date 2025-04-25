@@ -38,6 +38,7 @@ const formSchema = z.object({
     message: "In az 2 harp bolmaly",
   }),
   phone: z.string().min(2, { message: "In az 2 harp bolmaly" }),
+  image: z.instanceof(File, { message: "Harydyn suraty." }),
   status: z.enum(["active", "inactive"]),
 });
 
@@ -67,31 +68,32 @@ export const WorkersDialog = () => {
     };
   }, [getQuery("isModal")]);
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
-    try {
-      formSchema.parse(values);
-      handleCreateWorker(
-        {
-          fullName: values.name,
-          job: values.job,
-          phone: values.phone,
-          state: values.status as $Enums.State,
-        },
-        {
-          onSuccess: () => {
-            closeRef.current?.click();
-          },
-        }
-      );
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        error.errors.forEach((err) => {
-          const errorPath = err.path[0] as FormErrorType;
-          form.setError(errorPath, { message: err.message });
-        });
-      } else {
-        console.error("Неизвестная ошибка:", error);
-      }
-    }
+    console.log(values);
+    // try {
+    //   formSchema.parse(values);
+    //   handleCreateWorker(
+    //     {
+    //       fullName: values.name,
+    //       job: values.job,
+    //       phone: values.phone,
+    //       state: values.status as $Enums.State,
+    //     },
+    //     {
+    //       onSuccess: () => {
+    //         closeRef.current?.click();
+    //       },
+    //     }
+    //   );
+    // } catch (error) {
+    //   if (error instanceof z.ZodError) {
+    //     error.errors.forEach((err) => {
+    //       const errorPath = err.path[0] as FormErrorType;
+    //       form.setError(errorPath, { message: err.message });
+    //     });
+    //   } else {
+    //     console.error("Неизвестная ошибка:", error);
+    //   }
+    // }
   };
   return (
     <DialogContent>
@@ -99,6 +101,28 @@ export const WorkersDialog = () => {
       <DialogDescription hidden></DialogDescription>
       <Form {...form}>
         <form className="space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="image"
+            render={() => (
+              <FormItem>
+                <FormLabel>Suraty</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      form.setValue("image", file as File, {
+                        shouldValidate: true,
+                      });
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="name"
