@@ -3,16 +3,15 @@ import { stat, mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import mime from "mime";
 import { PrismaClient } from "@prisma/client";
+import cuid from "cuid";
 const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
 
   const name = (formData.get("name") as string) || null;
-  const price = (Number(formData.get("price")) as number) || null;
-  const count = (Number(formData.get("count")) as number) || null;
-  const primaryPrice =
-    (Number(formData.get("primary_price")) as number) || null;
-  const type = (formData.get("type") as string) || null;
+  const jobMain = (formData.get("job") as string) || null;
+  const phone = (formData.get("phone") as string) || null;
+  const state = (formData.get("state") as "active" | "inactive") || null;
   const image = (formData.get("image") as File) || null;
   const buffer = Buffer.from(await image.arrayBuffer());
   const relativeUploadDir = `/uploads/${new Date(Date.now())
@@ -51,47 +50,25 @@ export async function POST(req: NextRequest) {
     )}-${uniqueSuffix}.${mime.getExtension(image.type)}`;
     await writeFile(`${uploadDir}/${filename}`, buffer);
     const fileUrl = `${relativeUploadDir}/${filename}`;
-
-    const result = await prisma.product.create({
+    //  const job = await prisma.job.findFirst({ where: { name: payload.job } });
+    const result = await prisma.employer.create({
       data: {
-        name: name ?? "",
-        count: count ?? 0,
-        price: price ?? 0,
-        primaryPrice: primaryPrice ?? 0,
-        type: type ?? "",
-        image: fileUrl,
-        profit: price ? price - (primaryPrice ?? 0) : 0,
+        avatar: fileUrl,
+        fullName: name ? name : "",
+        phone: phone ? phone : "",
+        jobs: {
+          create: {
+            name: jobMain ? jobMain : "",
+            id: cuid(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        },
+        state,
       },
     });
 
     return NextResponse.json({ user: result });
-  } catch (e) {
-    console.error("Error while trying to upload a file\n", e);
-    return NextResponse.json(
-      { error: "Something went wrong." },
-      { status: 500 }
-    );
-  }
-}
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const page = Number(searchParams.get("page")) || 1;
-  const limit = Number(searchParams.get("limit")) || 10;
-  const type = searchParams.get("type")
-    ? String(searchParams.get("type"))
-    : undefined;
-
-  const [total, data] = await Promise.all([
-    prisma.product.count({ where: { type } }),
-    prisma.product.findMany({
-      where: { type },
-      orderBy: { createdAt: "desc" },
-      skip: (page - 1) * limit,
-      take: limit,
-    }),
-  ]);
-  try {
-    return NextResponse.json({ data, total });
   } catch (e) {
     console.error("Error while trying to upload a file\n", e);
     return NextResponse.json(

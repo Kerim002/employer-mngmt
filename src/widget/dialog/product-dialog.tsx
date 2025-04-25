@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 import { Button } from "@/shared/ui/button";
+import { useMutation } from "@tanstack/react-query";
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "In az 2 harp bolmaly",
@@ -62,8 +63,26 @@ export const ProductDialog = () => {
       });
     };
   }, [getQuery("isModal")]);
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: FormSchemaType) => {
+      const form = new FormData();
+      form.append("name", values.name);
+      form.append("price", values.price);
+      form.append("primary_price", values.sellprice);
+      form.append("type", values.type);
+      const res = await fetch("/api/products", { method: "POST", body: form });
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await res.json();
+      return data;
+    },
+    onSuccess: () => {
+      closeRef.current?.click();
+    },
+  });
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
-    console.log(values);
+    mutate(values);
   };
   return (
     <DialogContent>
@@ -136,7 +155,7 @@ export const ProductDialog = () => {
               </FormItem>
             )}
           />
-          <Button className="w-full" type="submit">
+          <Button disabled={isPending} className="w-full" type="submit">
             Submit
           </Button>
         </form>
