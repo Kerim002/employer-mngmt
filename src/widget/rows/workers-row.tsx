@@ -1,3 +1,4 @@
+"use client";
 import { useDeleteWorker } from "@/entities/workers/api/useDeleteWorker";
 import { Button } from "@/shared/ui/button";
 import { TableCell, TableRow } from "@/shared/ui/table";
@@ -44,11 +45,14 @@ export const WorkersRow = ({ worker, index }: Props) => {
           }
           photoWrapClassName="min-w-96 min-h-96 flex justify-center items-center"
         >
-          <PhotoView src={worker.avatar ?? ""}>
+          <PhotoView src={worker.avatar ?? "/user.png"}>
             <div className="relative w-14 h-14  ">
-              {worker.avatar && (
-                <Image fill src={worker.avatar} alt="" unoptimized />
-              )}
+              <Image
+                fill
+                src={worker.avatar ?? "/user.png"}
+                alt=""
+                unoptimized
+              />
             </div>
           </PhotoView>
         </PhotoProvider>
