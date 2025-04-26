@@ -1,7 +1,7 @@
 "use client";
 import { useQueryParam } from "@/shared/hook";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -39,6 +39,20 @@ const formSchema = z.object({
   count: z.string().min(1, { message: "In az 1 san bolmaly" }),
   image: z.instanceof(File, { message: "Harydyn suraty." }),
   type: z.enum(["milk", "meat", "foodstuffs"]),
+  image: z
+    .instanceof(File, { message: "Файл должен быть изображением" })
+
+    .refine((file) => file && file?.size < 5 * 1024 * 1024, {
+      message: "image-size-limit",
+    })
+    .refine(
+      (file) =>
+        file && ["image/jpeg", "image/png", "image/webp"].includes(file.type),
+      {
+        message: "allowed-image-format",
+      }
+    )
+    .optional(),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -56,6 +70,19 @@ export const ProductDialog = () => {
       count: "0",
     },
   });
+  const [preview, setPreview] = useState<string | null>(null);
+  const imageFile = form.watch("image") as File;
+
+  useEffect(() => {
+    if (imageFile instanceof File) {
+      const objectUrl = URL.createObjectURL(imageFile);
+      setPreview(objectUrl);
+
+      return () => URL.revokeObjectURL(objectUrl); // Освобождаем URL при изменении
+    } else {
+      setPreview(null);
+    }
+  }, [imageFile]);
   useEffect(() => {
     return () => {
       form.reset({

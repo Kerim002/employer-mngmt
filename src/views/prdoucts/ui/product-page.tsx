@@ -1,3 +1,4 @@
+"use client";
 import { ProductTable } from "@/entities/products/ui/product-table";
 import { QueryModalBtn } from "@/features/button";
 import { ProductDialog } from "@/widget";
