@@ -12,6 +12,7 @@ import { QueryEditBtn } from "@/features/button";
 type Props = {
   type: "milk" | "meat" | "foodstuffs";
 };
+import "react-photo-view/dist/react-photo-view.css";
 export const ProductTable = ({ type }: Props) => {
   return (
     <Table>
