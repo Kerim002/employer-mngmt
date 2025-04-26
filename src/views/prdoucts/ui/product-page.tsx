@@ -4,6 +4,7 @@ import { QueryModalBtn } from "@/features/button";
 import { ProductDialog } from "@/widget";
 import dynamic from "next/dynamic";
 import React from "react";
+import "react-photo-view/dist/react-photo-view.css";
 const DialogProvider = dynamic(
   () => import("@/widget").then((mod) => mod.DialogProvider),
   {

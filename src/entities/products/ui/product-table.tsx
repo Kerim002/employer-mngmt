@@ -8,12 +8,11 @@ import {
   Table,
   TableCell,
 } from "@/shared/ui/table";
-import { QueryEditBtn } from "@/features/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { Button } from "@/shared/ui/button";
 import { Trash2 } from "lucide-react";
-
+import { PhotoProvider, PhotoView } from "react-photo-view";
 type Props = {
   type: "milk" | "meat" | "foodstuffs";
 };
@@ -72,6 +71,7 @@ export const ProductTable = ({ type }: Props) => {
           <TableHead className="text-right">Goşmaçalar</TableHead>
         </TableRow>
       </TableHeader>
+
       <TableBody>
         {data?.data
           .filter((item) => item.type === type)
@@ -80,15 +80,29 @@ export const ProductTable = ({ type }: Props) => {
               <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell>{product.name}</TableCell>
               <TableCell>
-                <div className="relative w-14  h-14">
-                  <Image
-                    fill
-                    className="object-cover rounded-md"
-                    unoptimized
-                    alt=""
-                    src={product.image}
-                  />
-                </div>
+                <PhotoProvider
+                  bannerVisible={false}
+                  maskOpacity={0.5}
+                  speed={() => 800}
+                  easing={(type) =>
+                    type === 2
+                      ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
+                      : "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                  }
+                  photoWrapClassName="min-w-96 min-h-96 flex justify-center items-center"
+                >
+                  <PhotoView src={product.image}>
+                    <div className="relative w-14  h-14">
+                      <Image
+                        fill
+                        className="object-cover rounded-md"
+                        unoptimized
+                        alt=""
+                        src={product.image}
+                      />
+                    </div>
+                  </PhotoView>
+                </PhotoProvider>
               </TableCell>
               <TableCell>{product.primaryPrice}</TableCell>
               <TableCell>{product.price}</TableCell>
