@@ -27,6 +27,7 @@ export const actionWorkerList = async ({
       state: item.state,
       id: item.id,
       createdAt: item.createdAt,
+      avatar: item.avatar,
     }));
 
     return { total, list };
