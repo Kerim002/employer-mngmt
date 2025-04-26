@@ -9,6 +9,7 @@ import {
 } from "@/shared/ui/table";
 import { WorkersRow } from "@/widget";
 import { useWorkerList } from "../api/useWorkerList";
+import "react-photo-view/dist/react-photo-view.css";
 
 export function WorkersTable() {
   const { list } = useWorkerList({});
