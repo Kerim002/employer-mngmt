@@ -29,6 +29,7 @@ import { Button } from "@/shared/ui/button";
 import { useCreateEmployer } from "@/entities/workers";
 import { $Enums } from "@prisma/client";
 import { useQueryParam } from "@/shared/hook";
+import { useMutation } from "@tanstack/react-query";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -38,6 +39,7 @@ const formSchema = z.object({
     message: "In az 2 harp bolmaly",
   }),
   phone: z.string().min(2, { message: "In az 2 harp bolmaly" }),
+  image: z.instanceof(File, { message: "Harydyn suraty." }),
   status: z.enum(["active", "inactive"]),
 });
 
@@ -66,32 +68,56 @@ export const WorkersDialog = () => {
       });
     };
   }, [getQuery("isModal")]);
-  const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
-    try {
-      formSchema.parse(values);
-      handleCreateWorker(
-        {
-          fullName: values.name,
-          job: values.job,
-          phone: values.phone,
-          state: values.status as $Enums.State,
-        },
-        {
-          onSuccess: () => {
-            closeRef.current?.click();
-          },
-        }
-      );
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        error.errors.forEach((err) => {
-          const errorPath = err.path[0] as FormErrorType;
-          form.setError(errorPath, { message: err.message });
-        });
-      } else {
-        console.error("Неизвестная ошибка:", error);
+
+  const { mutate } = useMutation({
+    mutationFn: async (values: FormSchemaType) => {
+      const formdata = new FormData();
+      formdata.append("name", values.name);
+      formdata.append("phone", values.phone);
+      formdata.append("state", values.status);
+      formdata.append("image", values.image);
+      formdata.append("job", values.job);
+      const res = await fetch("http://localhost:5000/api/worker", {
+        method: "POST",
+        body: formdata,
+      });
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
       }
-    }
+      const data = await res.json();
+      return data;
+    },
+    onSuccess: () => {
+      closeRef.current?.click();
+    },
+  });
+  const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
+    mutate(values);
+    // try {
+    //   formSchema.parse(values);
+    //   handleCreateWorker(
+    //     {
+    //       fullName: values.name,
+    //       job: values.job,
+    //       phone: values.phone,
+    //       state: values.status as $Enums.State,
+    //     },
+    //     {
+    //       onSuccess: () => {
+    //         closeRef.current?.click();
+    //       },
+    //     }
+    //   );
+    // } catch (error) {
+    //   if (error instanceof z.ZodError) {
+    //     error.errors.forEach((err) => {
+    //       const errorPath = err.path[0] as FormErrorType;
+    //       form.setError(errorPath, { message: err.message });
+    //     });
+    //   } else {
+    //     console.error("Неизвестная ошибка:", error);
+    //   }
+    // }
   };
   return (
     <DialogContent>
@@ -99,6 +125,28 @@ export const WorkersDialog = () => {
       <DialogDescription hidden></DialogDescription>
       <Form {...form}>
         <form className="space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="image"
+            render={() => (
+              <FormItem>
+                <FormLabel>Suraty</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      form.setValue("image", file as File, {
+                        shouldValidate: true,
+                      });
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="name"
