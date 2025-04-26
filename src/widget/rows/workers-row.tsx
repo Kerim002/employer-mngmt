@@ -5,6 +5,7 @@ import { TableCell, TableRow } from "@/shared/ui/table";
 import { $Enums } from "@prisma/client";
 import { format } from "date-fns";
 import { Trash2 } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
 type Props = {
@@ -21,6 +22,7 @@ type Props = {
     state: $Enums.State;
     id: string;
     createdAt: Date;
+    avatar: string | null;
   };
   index: number;
 };
@@ -30,6 +32,13 @@ export const WorkersRow = ({ worker, index }: Props) => {
   return (
     <TableRow key={worker.id}>
       <TableCell className="font-medium">{index}</TableCell>
+      <TableCell>
+        <div className="relative w-14 h-14  ">
+          {worker.avatar && (
+            <Image fill src={worker.avatar} alt="" unoptimized />
+          )}
+        </div>
+      </TableCell>
       <TableCell>{worker.fullName}</TableCell>
       <TableCell>{worker.job?.name}</TableCell>
       {/* <TableCell>{worker.department?.name}</TableCell> */}
