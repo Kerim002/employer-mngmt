@@ -9,16 +9,63 @@ import {
   TableCell,
 } from "@/shared/ui/table";
 import { QueryEditBtn } from "@/features/button";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import { Button } from "@/shared/ui/button";
+import { Trash2 } from "lucide-react";
+
 type Props = {
   type: "milk" | "meat" | "foodstuffs";
 };
+
+type Product = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  image: string;
+  primaryPrice: number;
+  price: number;
+  profit: number;
+  count: number;
+  type: "milk" | "meat" | "foodstuffs";
+};
+
+type ProductResponse = {
+  data: Product[];
+  total: number;
+};
+
 export const ProductTable = ({ type }: Props) => {
+  const queryCLient = useQueryClient();
+  const { data } = useQuery<ProductResponse>({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const res = await fetch("http://localhost:5000/api/product");
+      return res.json();
+    },
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: async (id: string) => {
+      await fetch(`http://localhost:5000/api/product/${id}`, {
+        method: "DELETE",
+      });
+    },
+    onSuccess: () => {
+      queryCLient.invalidateQueries({
+        queryKey: ["products"],
+      });
+    },
+  });
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>No</TableHead>
           <TableHead>Harydyn ady</TableHead>
+          <TableHead>Harydyn suraty</TableHead>
           <TableHead>Gelen bahasy</TableHead>
           <TableHead>Satylmaly bahasy</TableHead>
           <TableHead>Peýda</TableHead>
@@ -26,24 +73,37 @@ export const ProductTable = ({ type }: Props) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {[...Array.from({ length: 20 })]?.map((_, index) => (
-          <TableRow key={index}>
-            <TableCell className="font-medium">{index}</TableCell>
-            <TableCell>Täze aý süýt</TableCell>
-            <TableCell>10</TableCell>
-            <TableCell>15</TableCell>
-            <TableCell>5</TableCell>
-
-            <TableCell className="text-right space-x-2">
-              <QueryEditBtn
-                queries={[
-                  { key: "isModal", value: "true" },
-                  { key: "id", value: "id" },
-                ]}
-              />
-            </TableCell>
-          </TableRow>
-        ))}
+        {data?.data
+          .filter((item) => item.type === type)
+          .map((product, index) => (
+            <TableRow key={product.id}>
+              <TableCell className="font-medium">{index + 1}</TableCell>
+              <TableCell>{product.name}</TableCell>
+              <TableCell>
+                <div className="relative w-14  h-14">
+                  <Image
+                    fill
+                    className="object-cover rounded-md"
+                    unoptimized
+                    alt=""
+                    src={product.image}
+                  />
+                </div>
+              </TableCell>
+              <TableCell>{product.primaryPrice}</TableCell>
+              <TableCell>{product.price}</TableCell>
+              <TableCell>{product.profit}</TableCell>
+              <TableCell className="text-right space-x-2">
+                <Button
+                  onClick={() => mutate(product.id)}
+                  variant="destructive"
+                  size="icon"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );

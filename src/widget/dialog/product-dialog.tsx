@@ -27,7 +27,7 @@ import {
   SelectValue,
 } from "@/shared/ui/select";
 import { Button } from "@/shared/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "In az 2 harp bolmaly",
@@ -45,6 +45,7 @@ type FormSchemaType = z.infer<typeof formSchema>;
 export const ProductDialog = () => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const { getQuery } = useQueryParam();
+  const queryClient = useQueryClient();
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,12 +69,17 @@ export const ProductDialog = () => {
   }, [getQuery("isModal")]);
   const { mutate, isPending } = useMutation({
     mutationFn: async (values: FormSchemaType) => {
-      const form = new FormData();
-      form.append("name", values.name);
-      form.append("price", values.price);
-      form.append("primary_price", values.sellprice);
-      form.append("type", values.type);
-      const res = await fetch("/api/products", { method: "POST", body: form });
+      const formdata = new FormData();
+      formdata.append("name", values.name);
+      formdata.append("price", values.price);
+      formdata.append("primary_price", values.primary_price);
+      formdata.append("count", values.count);
+      formdata.append("type", values.type);
+      formdata.append("image", values.image);
+      const res = await fetch("http://localhost:5000/api/product", {
+        method: "POST",
+        body: formdata,
+      });
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
@@ -81,17 +87,14 @@ export const ProductDialog = () => {
       return data;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["products"],
+      });
       closeRef.current?.click();
     },
   });
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
-    const formdata = new FormData();
-    formdata.append("name", values.name);
-    formdata.append("price", values.price);
-    formdata.append("primary_price", values.primary_price);
-    formdata.append("count", values.count);
-    formdata.append("type", values.type);
-    formdata.append("image", values.image);
+    mutate(values);
   };
   return (
     <DialogContent>

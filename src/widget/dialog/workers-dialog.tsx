@@ -29,6 +29,7 @@ import { Button } from "@/shared/ui/button";
 import { useCreateEmployer } from "@/entities/workers";
 import { $Enums } from "@prisma/client";
 import { useQueryParam } from "@/shared/hook";
+import { useMutation } from "@tanstack/react-query";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -67,8 +68,31 @@ export const WorkersDialog = () => {
       });
     };
   }, [getQuery("isModal")]);
+
+  const { mutate } = useMutation({
+    mutationFn: async (values: FormSchemaType) => {
+      const formdata = new FormData();
+      formdata.append("name", values.name);
+      formdata.append("phone", values.phone);
+      formdata.append("state", values.status);
+      formdata.append("image", values.image);
+      formdata.append("job", values.job);
+      const res = await fetch("http://localhost:5000/api/worker", {
+        method: "POST",
+        body: formdata,
+      });
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await res.json();
+      return data;
+    },
+    onSuccess: () => {
+      closeRef.current?.click();
+    },
+  });
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
-    console.log(values);
+    mutate(values);
     // try {
     //   formSchema.parse(values);
     //   handleCreateWorker(
