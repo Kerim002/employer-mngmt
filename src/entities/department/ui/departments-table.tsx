@@ -1,12 +1,12 @@
 "use client";
 
 import {
+  Table,
   TableBody,
   TableCaption,
   TableHead,
   TableHeader,
   TableRow,
-  Table,
 } from "@/shared/ui/table";
 import { useDepartmentQuery } from "../api/useDepartmentQuery";
 import { DepartmentRow } from "@/widget";
@@ -15,26 +15,28 @@ export function DepartmentsTable() {
   const { list } = useDepartmentQuery();
 
   return (
-    <Table>
-      <TableCaption>Ähli bölümler</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Bölüm ID</TableHead>
-          <TableHead>Bölüm Id</TableHead>
-          <TableHead>Manager Ady</TableHead>
-          <TableHead>Jemi işçiler</TableHead>
-          <TableHead className="text-right">Goşmaçalar</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {list?.map((department, index) => (
-          <DepartmentRow
-            key={department.id}
-            department={department}
-            index={index}
-          />
-        ))}
-      </TableBody>
-    </Table>
+    <div className="rounded-xl border shadow-sm overflow-x-auto">
+      <Table>
+        <TableCaption>Ähli bölümleriň sanawy</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-20 text-center">No</TableHead>
+            <TableHead>Bölüm Ady</TableHead>
+            <TableHead>Menecer</TableHead>
+            <TableHead>Jemi Işgärler</TableHead>
+            <TableHead className="text-right">Hereketler</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {list?.map((department, index) => (
+            <DepartmentRow
+              key={department.id}
+              department={department}
+              index={index}
+            />
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

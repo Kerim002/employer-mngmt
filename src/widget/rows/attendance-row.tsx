@@ -36,7 +36,7 @@ export const AttendanceRow = ({ record, index }: Props) => {
   const { handleDeleteAttendance } = useAttendanceDeleteMutation();
   return (
     <TableRow>
-      <TableCell className="font-medium">{index}</TableCell>
+      <TableCell className="font-medium text-center">{index}</TableCell>
       <TableCell>{record.employers?.fullName}</TableCell>
       <TableCell>
         {record.enterAt ? `${format(record.enterAt, "dd.MM.yyyy")}` : "-"}

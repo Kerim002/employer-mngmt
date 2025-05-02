@@ -1,3 +1,4 @@
+"use client";
 import {
   Collapsible,
   CollapsibleContent,
@@ -12,9 +13,12 @@ import {
 } from "@/shared/ui/sidebar";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const AppSidebarItem = (item: SidebarItemSchema) => {
+  const pathname = usePathname();
+
   return item.isDropdown ? (
     <Collapsible
       key={item.title}
@@ -34,7 +38,10 @@ const AppSidebarItem = (item: SidebarItemSchema) => {
           <SidebarMenuSub>
             {item.items?.map((subItem) => (
               <SidebarMenuSubItem key={subItem.title}>
-                <SidebarMenuSubButton asChild>
+                <SidebarMenuSubButton
+                  isActive={pathname === subItem.url}
+                  asChild
+                >
                   <Link href={subItem.url}>
                     <span>{subItem.title}</span>
                   </Link>
@@ -48,7 +55,11 @@ const AppSidebarItem = (item: SidebarItemSchema) => {
   ) : (
     <SidebarMenuItem key={item.title}>
       <Link href={item.url}>
-        <SidebarMenuButton tooltip={item.title}>
+        <SidebarMenuButton
+          isActive={pathname === item.url}
+          tooltip={item.title}
+          className=""
+        >
           {item.icon && <item.icon />}
           <span>{item.title}</span>
         </SidebarMenuButton>

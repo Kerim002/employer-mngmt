@@ -1,5 +1,4 @@
 import { useDepartmentDelete } from "@/entities/department/api/useDepartmentDelete";
-import { QueryEditBtn } from "@/features/button";
 import { Button } from "@/shared/ui/button";
 import { TableCell, TableRow } from "@/shared/ui/table";
 import { Trash2 } from "lucide-react";
@@ -18,16 +17,18 @@ type Props = {
   };
   index: number;
 };
+
 export const DepartmentRow = ({ department, index }: Props) => {
   const { handleDeleteDepartment } = useDepartmentDelete();
 
   return (
-    <TableRow key={department.id}>
-      <TableCell className="font-medium">{index + 1}</TableCell>
-      <TableCell>{department.name}</TableCell>
-      <TableCell>{department.manager?.fullName}</TableCell>
+    <TableRow>
+      <TableCell className="text-center">{index + 1}</TableCell>
+      <TableCell className="font-medium">{department.name}</TableCell>
+      <TableCell>{department.manager?.fullName || "—"}</TableCell>
       <TableCell>{department.count}</TableCell>
       <TableCell className="text-right space-x-2">
+        {/* Uncomment if edit is needed */}
         {/* <QueryEditBtn
           queries={[
             { key: "isModal", value: "true" },
@@ -36,7 +37,6 @@ export const DepartmentRow = ({ department, index }: Props) => {
         /> */}
         <Button
           onClick={() => handleDeleteDepartment(department.id)}
-          // onClick={() => console.log("first")}
           variant="destructive"
           size="icon"
         >

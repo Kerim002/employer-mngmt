@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import {
+  Table,
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
-  Table,
   TableCell,
 } from "@/shared/ui/table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import Image from "next/image";
 import { Button } from "@/shared/ui/button";
 import { Trash2 } from "lucide-react";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+
 type Props = {
   type: "milk" | "meat" | "foodstuffs";
 };
@@ -36,7 +37,8 @@ type ProductResponse = {
 };
 
 export const ProductTable = ({ type }: Props) => {
-  const queryCLient = useQueryClient();
+  const queryClient = useQueryClient();
+
   const { data } = useQuery<ProductResponse>({
     queryKey: ["products"],
     queryFn: async () => {
@@ -52,73 +54,63 @@ export const ProductTable = ({ type }: Props) => {
       });
     },
     onSuccess: () => {
-      queryCLient.invalidateQueries({
-        queryKey: ["products"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>No</TableHead>
-          <TableHead>Harydyn ady</TableHead>
-          <TableHead>Harydyn suraty</TableHead>
-          <TableHead>Gelen bahasy</TableHead>
-          <TableHead>Satylmaly bahasy</TableHead>
-          <TableHead>Peýda</TableHead>
-          <TableHead className="text-right">Goşmaçalar</TableHead>
-        </TableRow>
-      </TableHeader>
-
-      <TableBody>
-        {data?.data
-          .filter((item) => item.type === type)
-          .map((product, index) => (
-            <TableRow key={product.id}>
-              <TableCell className="font-medium">{index + 1}</TableCell>
-              <TableCell>{product.name}</TableCell>
-              <TableCell>
-                <PhotoProvider
-                  bannerVisible={false}
-                  maskOpacity={0.5}
-                  speed={() => 800}
-                  easing={(type) =>
-                    type === 2
-                      ? "cubic-bezier(0.36, 0, 0.66, -0.56)"
-                      : "cubic-bezier(0.34, 1.56, 0.64, 1)"
-                  }
-                  photoWrapClassName="min-w-96 min-h-96 flex justify-center items-center"
-                >
-                  <PhotoView src={product.image}>
-                    <div className="relative w-14  h-14">
-                      <Image
-                        fill
-                        className="object-cover rounded-md"
-                        unoptimized
-                        alt=""
-                        src={product.image}
-                      />
-                    </div>
-                  </PhotoView>
-                </PhotoProvider>
-              </TableCell>
-              <TableCell>{product.primaryPrice}</TableCell>
-              <TableCell>{product.price}</TableCell>
-              <TableCell>{product.profit}</TableCell>
-              <TableCell className="text-right space-x-2">
-                <Button
-                  onClick={() => mutate(product.id)}
-                  variant="destructive"
-                  size="icon"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-      </TableBody>
-    </Table>
+    <div className="rounded-xl border shadow-sm overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-12 text-center">No</TableHead>
+            <TableHead>Ady</TableHead>
+            <TableHead>Suraty</TableHead>
+            <TableHead>Gelen bahasy</TableHead>
+            <TableHead>Satylmaly bahasy</TableHead>
+            <TableHead>Peýda</TableHead>
+            <TableHead className="text-right">Hereketler</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data?.data
+            .filter((item) => item.type === type)
+            .map((product, index) => (
+              <TableRow key={product.id}>
+                <TableCell className="text-center">{index + 1}</TableCell>
+                <TableCell className="font-medium">{product.name}</TableCell>
+                <TableCell>
+                  <PhotoProvider>
+                    <PhotoView src={product.image}>
+                      <div className="relative w-16 h-16 cursor-pointer hover:scale-105 transition-transform">
+                        <Image
+                          fill
+                          src={product.image}
+                          className="object-cover rounded-md"
+                          alt="Haryt Suraty"
+                          unoptimized
+                        />
+                      </div>
+                    </PhotoView>
+                  </PhotoProvider>
+                </TableCell>
+                <TableCell>{product.primaryPrice} TMT</TableCell>
+                <TableCell>{product.price} TMT</TableCell>
+                <TableCell>{product.profit} TMT</TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    onClick={() => mutate(product.id)}
+                    variant="destructive"
+                    size="icon"
+                    className="hover:scale-105 transition-transform"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };

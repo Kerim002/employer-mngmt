@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     "swagger-client",
     "swagger-ui-react",
   ],
+  output: "standalone",
 };
 
 export default nextConfig;

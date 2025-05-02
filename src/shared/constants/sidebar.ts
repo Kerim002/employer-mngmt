@@ -27,7 +27,7 @@ export const sidebarData = {
   navMain: [
     {
       title: "Statistika",
-      url: "/",
+      url: "/dashboard",
       icon: LayoutDashboardIcon,
     },
     {

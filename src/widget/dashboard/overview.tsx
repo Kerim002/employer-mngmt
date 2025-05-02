@@ -64,7 +64,7 @@ export function Overview() {
       config={{
         total: {
           label: "Total",
-          color: "hsl(var(--chart-1))",
+          color: "hsl(var(--chart-2))",
         },
       }}
       className="h-[300px] w-full"

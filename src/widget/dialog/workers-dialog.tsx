@@ -1,10 +1,5 @@
 "use client";
-import {
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/shared/ui/dialog";
+import { DialogClose, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import {
   Form,
   FormControl,
@@ -13,11 +8,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui/form";
-import React, { useEffect, useRef } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/shared/ui/input";
 import {
   Select,
   SelectContent,
@@ -25,30 +15,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
+import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
 import { useCreateEmployer } from "@/entities/workers";
-import { $Enums } from "@prisma/client";
 import { useQueryParam } from "@/shared/hook";
-import { useMutation } from "@tanstack/react-query";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useRef } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "In az 2 harp bolmaly",
-  }),
-  job: z.string().min(2, {
-    message: "In az 2 harp bolmaly",
-  }),
-  phone: z.string().min(2, { message: "In az 2 harp bolmaly" }),
-  image: z.instanceof(File, { message: "Harydyn suraty." }),
+  name: z.string().min(2, { message: "Iň az 2 harp bolmaly" }),
+  job: z.string().min(2, { message: "Iň az 2 harp bolmaly" }),
+  phone: z.string().min(2, { message: "Iň az 2 harp bolmaly" }),
+  image: z.instanceof(File, { message: "Hünärmeniň suraty gerek" }),
   status: z.enum(["active", "inactive"]),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
-type FormErrorType = "name" | "job" | "phone" | "status";
+
 export const WorkersDialog = () => {
   const closeRef = useRef<HTMLButtonElement>(null);
   const { getQuery } = useQueryParam();
+  const queryClient = useQueryClient();
+
   const { handleCreateWorker, isPending } = useCreateEmployer();
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,6 +51,7 @@ export const WorkersDialog = () => {
       status: "inactive",
     },
   });
+
   useEffect(() => {
     return () => {
       form.reset({
@@ -71,60 +65,41 @@ export const WorkersDialog = () => {
 
   const { mutate } = useMutation({
     mutationFn: async (values: FormSchemaType) => {
-      const formdata = new FormData();
-      formdata.append("name", values.name);
-      formdata.append("phone", values.phone);
-      formdata.append("state", values.status);
-      formdata.append("image", values.image);
-      formdata.append("job", values.job);
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("phone", values.phone);
+      formData.append("state", values.status);
+      formData.append("image", values.image);
+      formData.append("job", values.job);
+
       const res = await fetch("http://localhost:5000/api/worker", {
         method: "POST",
-        body: formdata,
+        body: formData,
       });
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await res.json();
-      return data;
+
+      if (!res.ok) throw new Error("Server bilen baglanyşykda näsazlyk");
+
+      return await res.json();
     },
     onSuccess: () => {
       closeRef.current?.click();
+      queryClient.invalidateQueries({ queryKey: ["worker"] });
     },
   });
+
   const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
     mutate(values);
-    // try {
-    //   formSchema.parse(values);
-    //   handleCreateWorker(
-    //     {
-    //       fullName: values.name,
-    //       job: values.job,
-    //       phone: values.phone,
-    //       state: values.status as $Enums.State,
-    //     },
-    //     {
-    //       onSuccess: () => {
-    //         closeRef.current?.click();
-    //       },
-    //     }
-    //   );
-    // } catch (error) {
-    //   if (error instanceof z.ZodError) {
-    //     error.errors.forEach((err) => {
-    //       const errorPath = err.path[0] as FormErrorType;
-    //       form.setError(errorPath, { message: err.message });
-    //     });
-    //   } else {
-    //     console.error("Неизвестная ошибка:", error);
-    //   }
-    // }
   };
+
   return (
-    <DialogContent>
-      <DialogTitle hidden />
-      <DialogDescription hidden></DialogDescription>
+    <DialogContent className="sm:max-w-[500px] p-6 space-y-6">
+      <DialogTitle className="text-xl font-semibold text-center">
+        Täze Işgäri Goş
+      </DialogTitle>
+
       <Form {...form}>
-        <form className="space-y-3" onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* Image Upload */}
           <FormField
             control={form.control}
             name="image"
@@ -147,32 +122,38 @@ export const WorkersDialog = () => {
               </FormItem>
             )}
           />
+
+          {/* Name */}
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Isgarin ady</FormLabel>
+                <FormLabel>Ady</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input placeholder="Adyny giriziň" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* Job */}
           <FormField
             control={form.control}
             name="job"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Isin gornusi</FormLabel>
+                <FormLabel>Wezipesi</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input placeholder="Wezipesini giriziň" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* Phone */}
           <FormField
             control={form.control}
             name="phone"
@@ -180,42 +161,47 @@ export const WorkersDialog = () => {
               <FormItem>
                 <FormLabel>Telefon belgisi</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input placeholder="+993..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* Status */}
           <FormField
             control={form.control}
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Status sayla</FormLabel>
+                <FormLabel>Ýagdaýy</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Status sayla" />
+                      <SelectValue placeholder="Ýagdaýy saýla" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="active">Isjen</SelectItem>
-                    <SelectItem value="inactive">Isjen dal</SelectItem>
+                    <SelectItem value="active">Işjeň</SelectItem>
+                    <SelectItem value="inactive">Işjeň däl</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          {/* Submit Button */}
           <Button disabled={isPending} className="w-full" type="submit">
-            Submit
+            Ugrat
           </Button>
         </form>
-        <FormMessage />
       </Form>
+
+      {/* Hidden close button for programmatic use */}
       <DialogClose ref={closeRef} />
     </DialogContent>
   );
