@@ -108,7 +108,7 @@ export const ManagementDialog = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Isgari sayla</FormLabel>
+                <FormLabel>Işgari sayla</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -158,7 +158,7 @@ export const ManagementDialog = () => {
             )}
           />
           <Button disabled={isPending} type="submit" className="w-full">
-            Submit
+            Döretmek
           </Button>
         </form>
       </Form>

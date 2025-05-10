@@ -21,7 +21,7 @@ const ProductPage = ({ type }: Props) => {
     <div className="flex flex-col w-full px-4 md:px-8 py-6 gap-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Harytlar Sanawy</h1>
-        <QueryModalBtn>Create</QueryModalBtn>
+        <QueryModalBtn>Haryt döretmek</QueryModalBtn>
       </div>
       <ProductTable type={type} />
       <DialogProvider>

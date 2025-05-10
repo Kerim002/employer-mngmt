@@ -144,7 +144,7 @@ export const DepartmentDialog = () => {
             )}
           />
           <Button disabled={isPending} type="submit">
-            Submit
+            Döretmek
           </Button>
         </form>
       </Form>

@@ -111,7 +111,9 @@ export const AttendanceDialog = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button className="w-full mt-2" type="submit">
+            Döretmek
+          </Button>
         </form>
       </Form>
     </DialogContent>

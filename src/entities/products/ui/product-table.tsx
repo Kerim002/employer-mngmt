@@ -40,7 +40,7 @@ export const ProductTable = ({ type }: Props) => {
   const queryClient = useQueryClient();
 
   const { data } = useQuery<ProductResponse>({
-    queryKey: ["products"],
+    queryKey: ["products", type],
     queryFn: async () => {
       const res = await fetch("http://localhost:5000/api/product");
       return res.json();
@@ -57,6 +57,8 @@ export const ProductTable = ({ type }: Props) => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
+
+  console.log(data);
 
   return (
     <div className="rounded-xl border shadow-sm overflow-x-auto">

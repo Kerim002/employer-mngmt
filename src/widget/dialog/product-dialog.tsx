@@ -216,7 +216,7 @@ export const ProductDialog = () => {
             )}
           />
           <Button disabled={isPending} className="w-full" type="submit">
-            Submit
+            Döretmek
           </Button>
         </form>
         <FormMessage />

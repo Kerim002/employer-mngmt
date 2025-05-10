@@ -11,7 +11,6 @@ import { sidebarData } from "@/shared/constants";
 import { NavMain } from "./nav-main";
 import { TeamSwitcher } from "./team-switcher";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/shared/ui/button";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [isCollapsed, setIsCollapsed] = React.useState(false);

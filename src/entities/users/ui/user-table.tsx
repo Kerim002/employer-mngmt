@@ -23,7 +23,7 @@ export function UserManagementTable() {
             <TableHead className="w-20 text-center">No</TableHead>
             <TableHead>Ady</TableHead>
             <TableHead>Wezipesi</TableHead>
-            <TableHead>Baglanyşykly Menecer</TableHead>
+            <TableHead>Baglanyşykly Menejer</TableHead>
             <TableHead className="text-right">Hereketler</TableHead>
           </TableRow>
         </TableHeader>

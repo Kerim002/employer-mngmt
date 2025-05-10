@@ -16,12 +16,12 @@ const Header = () => (
   <header className="flex justify-between items-center px-8 py-4 bg-white shadow">
     <div className="text-xl flex-1 font-bold flex items-center gap-2">
       <div className="grid grid-cols-2 gap-1">
-        <div className="w-3 h-3 bg-blue-500 rounded-full" />
+        <div className="w-3 h-3 bg-green-500 rounded-full" />
         <div className="w-3 h-3 bg-black rounded-full" />
         <div className="w-3 h-3 bg-black rounded-full" />
         <div className="w-3 h-3 bg-black rounded-full" />
       </div>
-      Gülzemin<span className="text-blue-500">Administraýa</span>
+      Gülzemin<span className="text-green-500">Administraýa</span>
     </div>
     <nav className="flex flex-1 gap-6  justify-center text-gray-700">
       <Link href="/workers">Işgärler</Link>
@@ -37,7 +37,7 @@ const Header = () => (
 const HeroSection = () => (
   <section className="text-center px-4  flex items-center justify-center flex-col h-[90dvh] py-16 relative">
     <div className="grid grid-cols-2 gap-1 bg-white p-2.5 shadow-md rounded-xl">
-      <div className="w-4 h-4 bg-blue-500 rounded-full" />
+      <div className="w-4 h-4 bg-green-500 rounded-full" />
       <div className="w-4 h-4 bg-black rounded-full" />
       <div className="w-4 h-4 bg-black rounded-full" />
       <div className="w-4 h-4 bg-black rounded-full" />
@@ -52,39 +52,39 @@ const HeroSection = () => (
     </p>
     <Link
       href="/dashboard"
-      className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700"
+      className="mt-6 bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700"
     >
       Dowam etmek
     </Link>
 
-    <div className="absolute top-12 left-4 w-56 bg-yellow-100 text-sm rounded shadow p-2 rotate-[-6deg]">
+    <div className="absolute top-12 left-4 w-56 bg-green-100 text-sm rounded shadow p-2 rotate-[-6deg]">
       <p>
         <strong>Işgärler bölümi</strong> gözegçiligi bilen her bir iş prosesi
         yzygiderli we netijeli dowam edýär. Wagt we resurs tygşytlylygy üpjün
         edilýär.
       </p>
     </div>
-    <div className="absolute top-12 right-4 w-56 bg-yellow-100 text-sm rounded shadow p-2 rotate-[6deg]">
+    <div className="absolute top-12 right-4 w-56 bg-green-100 text-sm rounded shadow p-2 rotate-[6deg]">
       <p>
         <strong>Hasabat bölümi</strong> arkaly işgärleriň ýerine ýetirýän
         işleri, netijeliligi we ösüşi dogry seljerilýär. Ähli maglumatlar wagtly
         we anyk görnüşde elýeterlidir.
       </p>
     </div>
-    <div className="absolute bottom-10 left-6 w-56 bg-yellow-100 text-sm rounded shadow p-2 rotate-[6deg]">
+    {/* <div className="absolute bottom-10 left-6 w-56 bg-green-100 text-sm rounded shadow p-2 rotate-[6deg]">
       <p>
         <strong>Bölüm dolandyryşy</strong> her bir bölüm aýratynlykda tertipli
         we utgaşykly işleýär. Işgärler arasyndaky hyzmatdaşlyk güýçlenýär we
         umumy maksatlara ýetmek ýeňilleşdirilýär.
       </p>
-    </div>
-    <div className="absolute bottom-10 right-6 w-56 bg-yellow-100 text-sm rounded shadow p-2 rotate-[-6deg]">
+    </div> */}
+    {/* <div className="absolute bottom-10 right-6 w-56 bg-green-100 text-sm rounded shadow p-2 rotate-[-6deg]">
       <p>
         <strong>Dolandyryş bölümi </strong> bilen ýolbaşçylar ähli işgärleriň iş
         ýagdaýyny görüp, netijeli karar kabul edip bilýärler. Strategiki
         maksatlara laýyk ugurlar kesgitlenýär.
       </p>
-    </div>
+    </div> */}
 
     {/* Add more floating feature previews similarly */}
   </section>
