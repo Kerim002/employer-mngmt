@@ -30,7 +30,7 @@ import { Button } from "@/shared/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "In az 2 harp bolmaly",
+    message: "In az 2 harp bolmaly.",
   }),
   price: z.string().min(1, {
     message: "In az 1 san bolmaly",
