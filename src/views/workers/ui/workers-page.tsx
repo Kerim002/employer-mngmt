@@ -22,17 +22,7 @@ export const WorkersPage = () => {
         </QueryModalBtn>
       </div>
 
-      <Card className="shadow-md border rounded-xl">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold text-muted-foreground">
-            Işgärleriň tablisasynyň maglumatlary
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <WorkersTable />
-        </CardContent>
-      </Card>
-
+      <WorkersTable />
       <DialogProvider>
         <WorkersDialog />
       </DialogProvider>

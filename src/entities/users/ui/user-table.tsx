@@ -27,7 +27,7 @@ export function UserManagementTable() {
             <TableHead className="text-right">Hereketler</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="overflow-y-auto">
           {list?.map((user, index) => (
             <UsersRow key={user.id} index={index + 1} user={user} />
           ))}

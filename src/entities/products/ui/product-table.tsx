@@ -58,8 +58,6 @@ export const ProductTable = ({ type }: Props) => {
     },
   });
 
-  console.log(data);
-
   return (
     <div className="rounded-xl border shadow-sm overflow-x-auto">
       <Table>

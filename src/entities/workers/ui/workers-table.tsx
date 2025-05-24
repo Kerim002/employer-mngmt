@@ -15,7 +15,7 @@ export function WorkersTable() {
   const { list } = useWorkerList({});
 
   return (
-    <div className="overflow-auto rounded-lg border border-muted">
+    <div className="rounded-xl border shadow-sm overflow-x-auto ">
       <Table>
         <TableHeader>
           <TableRow className="bg-muted">
