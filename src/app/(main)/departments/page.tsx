@@ -1,8 +1,8 @@
-import { DepartmentsTable } from "@/entities/department/ui/departments-table";
+import { DepartmentPage } from "@/views/department";
 import React from "react";
 
 const Department = () => {
-  return <DepartmentsTable />;
+  return <DepartmentPage />;
 };
 
 export default Department;

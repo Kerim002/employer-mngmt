@@ -1,8 +1,8 @@
-import { UserManagementTable } from "@/entities/users/ui/user-table";
+import { UsersPage } from "@/views/users";
 import React from "react";
 
 const Users = () => {
-  return <UserManagementTable />;
+  return <UsersPage />;
 };
 
 export default Users;

@@ -4,3 +4,8 @@ type LanguageSchema = {
   full: LanguageFullVariant;
   short: LanguageShortVariant;
 };
+
+type PrismaPagination = {
+  page?: number;
+  pageSize?: number;
+};

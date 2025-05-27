@@ -1,3 +1,4 @@
 import FaqDeleteSelectedButton from "./faq-delete-selected-button";
-
-export { FaqDeleteSelectedButton };
+import QueryEditBtn from "./query-edit-btn";
+export { FaqDeleteSelectedButton, QueryEditBtn };
+export { QueryModalBtn } from "./query-modal-btn";
