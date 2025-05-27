@@ -13,6 +13,7 @@ export const DialogProvider = ({ children }: Props) => {
     <Dialog
       onOpenChange={() => deleteQuery(["isModal", "id"])}
       open={getQuery("isModal") ? true : false}
+      modal={false}
     >
       {children}
     </Dialog>

@@ -9,51 +9,51 @@ import {
 
 const data = [
   {
-    name: "Jan",
+    name: "Ýanwar",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Feb",
+    name: "Fewral",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Mar",
+    name: "Mart",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Apr",
+    name: "Aprel",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "May",
+    name: "Maý",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Jun",
+    name: "Iýun",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Jul",
+    name: "Iýul",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Aug",
+    name: "Awgust",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Sep",
+    name: "Sentaýbr",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Oct",
+    name: "Oktýabr",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Nov",
+    name: "Noýabr",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Dec",
+    name: "Dekabr",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
 ];
@@ -64,7 +64,7 @@ export function Overview() {
       config={{
         total: {
           label: "Total",
-          color: "hsl(var(--chart-1))",
+          color: "#22c55e",
         },
       }}
       className="h-[300px] w-full"
@@ -83,7 +83,7 @@ export function Overview() {
             fontSize={12}
             tickLine={false}
             axisLine={false}
-            tickFormatter={(value) => `$${value}`}
+            tickFormatter={(value) => `M${value}`}
           />
           <ChartTooltip content={<ChartTooltipContent />} />
           <Bar

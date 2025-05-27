@@ -4,11 +4,15 @@ import React from "react";
 
 type Props = {
   user: {
-    userId: string;
-    username: string;
-    role: string;
-    email: string;
+    fullName: string;
+    job: {
+      name: string;
+      id: string;
+    } | null;
+    manager: string | undefined;
+    id: string;
   };
+  index: number;
 };
 
 const getRoleColor = (role: string) => {
@@ -24,21 +28,17 @@ const getRoleColor = (role: string) => {
   }
 };
 
-export const UsersRow = ({ user }: Props) => {
+export const UsersRow = ({ user, index }: Props) => {
   return (
-    <TableRow key={user.userId}>
-      <TableCell className="font-medium">{user.userId}</TableCell>
-      <TableCell>{user.username}</TableCell>
+    <TableRow key={user.id}>
+      <TableCell className="font-medium">{index}</TableCell>
+      <TableCell>{user.fullName}</TableCell>
       <TableCell>
-        <span
-          className={`px-2 py-1 rounded-full text-xs ${getRoleColor(
-            user.role
-          )}`}
-        >
-          {user.role}
+        <span className={`px-2 py-1 rounded-full text-xs `}>
+          {user.job?.name}
         </span>
       </TableCell>
-      <TableCell>{user.email}</TableCell>
+      <TableCell>{user.manager}</TableCell>
       <TableCell className="text-right">
         {/* <Button
           variant="ghost"
@@ -50,7 +50,7 @@ export const UsersRow = ({ user }: Props) => {
         <QueryEditBtn
           queries={[
             { key: "isModal", value: "true" },
-            { key: "id", value: user.userId },
+            { key: "id", value: user.id },
           ]}
         />
       </TableCell>

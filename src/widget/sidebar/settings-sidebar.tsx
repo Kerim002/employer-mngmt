@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  SidebarGroup,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/shared/ui/sidebar";
+import { SidebarGroup, SidebarMenu } from "@/shared/ui/sidebar";
 import { settingsSidebarData } from "@/shared/constants";
 import { SettingsSidebarItem } from "@/features/sidebar";
 

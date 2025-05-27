@@ -8,18 +8,20 @@ datasource db {
 }
 
 model Employer {
+  avatar       String?      @map("avatar")
   id           String       @id @default(cuid())
   createdAt    DateTime     @default(now()) @map("created_at")
   updatedAt    DateTime     @default(now()) @map("updated_at")
   phone        String
   fullName     String
-  job          Job          @relation("job_employers", fields: [jobId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  jobId        String
-  departmentId String
+  jobs         Job?         @relation("job_employers", fields: [jobId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  jobId        String?
+  departmentId String?
   department   Department?  @relation("department_employers", fields: [departmentId], references: [id], onUpdate: Cascade)
   state        State
-  email        String       @unique
   departments  Department[]
+
+  attendances Attendance[]
 }
 
 enum State {
@@ -43,4 +45,26 @@ model Department {
   manager   Employer?  @relation(fields: [managerId], references: [id], onDelete: Cascade)
   managerId String?
   employers Employer[] @relation("department_employers")
+}
+
+model Attendance {
+  id         String    @id @default(cuid())
+  employers  Employer? @relation(fields: [employerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  enterAt    DateTime? @default(now())
+  exitAt     DateTime?
+  state      String
+  employerId String
+}
+
+model Product {
+  id           String   @id @default(cuid())
+  name         String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @map("updated_at")
+  image        String
+  primaryPrice Float
+  price        Float
+  profit       Float
+  count        Int
+  type         String
 }

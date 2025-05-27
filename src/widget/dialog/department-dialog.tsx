@@ -1,5 +1,10 @@
 "use client";
-import { DialogContent, DialogTitle } from "@/shared/ui/dialog";
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/shared/ui/dialog";
 import {
   Form,
   FormControl,
@@ -8,8 +13,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/ui/form";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useEffect, useRef } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/shared/ui/input";
@@ -20,6 +25,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select";
+import {
+  useCreateDepartmentMutation,
+  useDepartmentEmployersQuery,
+  useDepartmentIdQuery,
+} from "@/entities/department";
+import { Button } from "@/shared/ui/button";
+import { useQueryParam } from "@/shared/hook";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -31,24 +43,66 @@ const formSchema = z.object({
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
+type FormErrorType = "name" | "manager";
 
 export const DepartmentDialog = () => {
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const { getQuery } = useQueryParam();
+  const departmentId = getQuery("id");
+  const { list } = useDepartmentEmployersQuery();
+  const { handleCreateDepartment, isPending } = useCreateDepartmentMutation();
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      manager: "",
     },
   });
 
-  function onSubmit(values: FormSchemaType) {
-    console.log(values);
-  }
+  const { department } = useDepartmentIdQuery(departmentId);
+
+  useEffect(() => {
+    if (department) {
+      form.reset({
+        name: department.name || "",
+        manager: department.manager?.id || "",
+      });
+    }
+  }, [department, form]);
+
+  const onSubmit: SubmitHandler<FormSchemaType> = (values) => {
+    try {
+      formSchema.parse(values);
+      handleCreateDepartment(
+        { managerId: values.manager, name: values.name },
+        {
+          onSuccess: () => {
+            closeRef.current?.click();
+          },
+        }
+      );
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        error.errors.forEach((err) => {
+          const errorPath = err.path[0] as FormErrorType;
+          form.setError(errorPath, { message: err.message });
+        });
+      } else {
+        console.error("Неизвестная ошибка:", error);
+      }
+    }
+  };
 
   return (
     <DialogContent>
       <DialogTitle>Department gosmak</DialogTitle>
+      <DialogDescription hidden></DialogDescription>
       <Form {...form}>
-        <form className="" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          className="flex flex-col gap-5"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FormField
             control={form.control}
             name="name"
@@ -70,7 +124,7 @@ export const DepartmentDialog = () => {
                 <FormLabel>Menageri sayla</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value} // Ensure controlled component
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -78,16 +132,23 @@ export const DepartmentDialog = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="M">Dowran</SelectItem>
-                    <SelectItem value="F">Temur</SelectItem>
+                    {list?.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.fullName}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <Button disabled={isPending} type="submit">
+            Döretmek
+          </Button>
         </form>
       </Form>
+      <DialogClose ref={closeRef} />
     </DialogContent>
   );
 };

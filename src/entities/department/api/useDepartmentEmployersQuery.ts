@@ -1,20 +1,13 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import React from "react";
-import { departmentEmployers } from "../action/department-employers";
+import { useQuery } from "@tanstack/react-query";
+
+import { actionWorkerDepartmentList } from "../action/action-worker-department-list";
 
 export const useDepartmentEmployersQuery = () => {
   const { data } = useQuery({
-    queryKey: ["department", "employers"],
-    queryFn: () => departmentEmployers(),
-    select: (data) => {
-      const list = data.flatMap((item) =>
-        item.employers.map((employer) => {
-          const { fullName, id } = employer;
-          return { id, managerName: fullName };
-        })
-      );
-      return { list, total: data[0]._count };
+    queryKey: ["worker", "department"],
+    queryFn: async () => {
+      return await actionWorkerDepartmentList();
     },
   });
-  return { ...data };
+  return { list: data };
 };

@@ -1,7 +1,9 @@
+import { useAttendanceDeleteMutation } from "@/entities/attendance/api/useAttendanceDeleteMutation";
 import { QueryEditBtn } from "@/features/button";
 import { Button } from "@/shared/ui/button";
 import { TableCell, TableRow } from "@/shared/ui/table";
-import { Pencil } from "lucide-react";
+import { format } from "date-fns";
+import { Pencil, Trash } from "lucide-react";
 import React from "react";
 
 const getStatusColor = (status: string) => {
@@ -19,34 +21,46 @@ const getStatusColor = (status: string) => {
 
 type Props = {
   record: {
-    workerId: string;
-    fullName: string;
-    date: string;
-    checkInTime: string;
-    checkOutTime: string;
-    status: string;
+    id: string;
+    enterAt: Date | null;
+    exitAt: Date | null;
+    state: string;
+    employers: {
+      fullName: string;
+    } | null;
   };
+  index: number;
 };
 
-export const AttendanceRow = ({ record }: Props) => {
+export const AttendanceRow = ({ record, index }: Props) => {
+  const { handleDeleteAttendance } = useAttendanceDeleteMutation();
   return (
     <TableRow>
-      <TableCell className="font-medium">{record.workerId}</TableCell>
-      <TableCell>{record.fullName}</TableCell>
-      <TableCell>{record.date}</TableCell>
-      <TableCell>{record.checkInTime}</TableCell>
-      <TableCell>{record.checkOutTime}</TableCell>
+      <TableCell className="font-medium text-center">{index}</TableCell>
+      <TableCell>{record.employers?.fullName}</TableCell>
+      <TableCell>
+        {record.enterAt ? `${format(record.enterAt, "dd.MM.yyyy")}` : "-"}
+      </TableCell>
+      <TableCell>
+        {record.exitAt ? `${format(record.exitAt, "dd.MM.yyyy")}` : "-"}
+      </TableCell>
       <TableCell>
         <span
           className={`px-2 py-1 rounded-full text-xs ${getStatusColor(
-            record.status
+            record.state
           )}`}
         >
-          {record.status}
+          {record.state}
         </span>
       </TableCell>
       <TableCell className="text-right">
-        <QueryEditBtn queries={[{ key: "isModal", value: "true" }]} />
+        <Button
+          onClick={() => handleDeleteAttendance(record.id)}
+          variant="destructive"
+        >
+          <Trash />
+        </Button>
+        {/* <QueryEditBtn queries={[{ key: "isModal", value: "true" }]} /> */}
       </TableCell>
     </TableRow>
   );

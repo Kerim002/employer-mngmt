@@ -54,18 +54,7 @@ const initialPayroll = [
 ];
 
 export function PayrollTable() {
-  const [payroll, setPayroll] = useState(initialPayroll);
-
-  const handleEdit = (workerId: string) => {
-    // Implement edit functionality
-    console.log(`Edit payroll for worker with ID: ${workerId}`);
-  };
-
-  const handleDownload = (workerId: string) => {
-    // Implement download functionality
-    console.log(`Download payslip for worker with ID: ${workerId}`);
-  };
-
+  const [payroll] = useState(initialPayroll);
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "paid":
@@ -114,14 +103,14 @@ export function PayrollTable() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => handleEdit(record.workerId)}
+                // onClick={() => handleEdit(record.workerId)}
               >
                 <Pencil className="h-4 w-4" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => handleDownload(record.workerId)}
+                // onClick={() => handleDownload(record.workerId)}
               >
                 <Download className="h-4 w-4" />
               </Button>

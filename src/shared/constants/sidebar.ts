@@ -2,9 +2,13 @@ import {
   FileVideo2,
   GalleryVerticalEnd,
   LayoutDashboardIcon,
+  LayoutPanelTop,
   MapPin,
+  MessageSquareWarning,
+  Pickaxe,
   Settings,
   Settings2Icon,
+  Sprout,
 } from "lucide-react";
 
 export const sidebarData = {
@@ -23,23 +27,43 @@ export const sidebarData = {
   navMain: [
     {
       title: "Statistika",
-      url: "/",
+      url: "/dashboard",
       icon: LayoutDashboardIcon,
     },
     {
       title: "Işgärler",
       url: "/workers",
-      icon: FileVideo2,
+      icon: Pickaxe,
+    },
+    {
+      title: "Harytlar",
+      url: "/products",
+      icon: Sprout,
+      isDropdown: true,
+      items: [
+        {
+          title: "Et önümleri",
+          url: "/product/meat",
+        },
+        {
+          title: "Süýt önümleri",
+          url: "/product/milk",
+        },
+        {
+          title: "Azyk harytlar",
+          url: "/product/foodstuffs",
+        },
+      ],
     },
     {
       title: "Hasabat",
       url: "/attendance",
-      icon: Settings,
+      icon: MessageSquareWarning,
     },
     {
       title: "Bölümler",
       url: "/departments",
-      icon: Settings,
+      icon: LayoutPanelTop,
     },
 
     {

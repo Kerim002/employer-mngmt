@@ -1,65 +1,100 @@
-import axios, { type CreateAxiosDefaults } from "axios";
-
+import Cookie from "js-cookie";
 import { API_URL } from "../config";
-import { tokenService } from "../service/auth-token.service";
-import { errorCatch } from "./error";
-import { refreshService } from "../service/refresh.service";
+import { redirect } from "next/navigation";
+class ApiError extends Error {
+  constructor(public response: Response) {
+    super("ApiError:" + response.status + "\n" + response);
+  }
+}
 
-const options: CreateAxiosDefaults = {
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: false,
+export const handleApiError = async (error: unknown) => {
+  if (error instanceof ApiError) {
+    try {
+      const errorData = (await error.response.json()) as {
+        loc: string[];
+        msg: string;
+        type: string;
+      };
+      return errorData;
+    } catch {
+      return { loc: [], msg: "unknown", type: "unknown" };
+    }
+  } else {
+    return { loc: [], msg: "unknown", type: "unknown" };
+  }
 };
 
-const axiosClassic = axios.create(options);
-
-axiosClassic.interceptors.request.use((config) => {
-  const language =
-    JSON.parse(localStorage.getItem("language") || "{}").state?.language ||
-    "tkm";
-  config.headers["accept-language"] = language;
-  return config;
-});
-
-const axiosWithAuth = axios.create(options);
-
-axiosWithAuth.interceptors.request.use((config) => {
-  const accessToken = tokenService.getAccessToken();
-  if (config?.headers && accessToken) {
-    config.headers.Authorization = `${accessToken}`;
+export const jsonApiInstance = async <T>(
+  url: string,
+  init?: RequestInit & {
+    json?: unknown;
+    params?: Record<string, any>;
   }
-  const language =
-    JSON.parse(localStorage.getItem("language") || "{}").state?.language ||
-    "en";
-  config.headers["accept-language"] = language;
-  return config;
-});
+) => {
+  let headers = init?.headers ?? {};
+  headers = {
+    Accept: "application/json",
+    ...headers,
+  };
 
-axiosWithAuth.interceptors.response.use(
-  (config) => config,
-  async (error) => {
-    const originalRequest = error.config;
-    if (
-      error?.response?.status === 401 ||
-      errorCatch(error) === "jwt expired" ||
-      (errorCatch(error) === "jwt must be provided" &&
-        error.config &&
-        !error.config._isRetry)
-    ) {
-      originalRequest._isRetry = false;
-      try {
-        await refreshService.refreshTokens();
-        return axiosWithAuth.request(originalRequest);
-      } catch (error) {
-        if (errorCatch(error) === "jwt expired")
-          tokenService.removeTokenFromStorage();
-      }
+  if (init?.json) {
+    headers = {
+      "Content-Type": "application/json",
+
+      ...headers,
+    };
+    init.body = JSON.stringify(init.json);
+  }
+  if (init?.params) {
+    const params = cleanParams(init?.params);
+    const searchParams = new URLSearchParams(params);
+    url = `${url}${searchParams.toString() && "?" + searchParams.toString()}`;
+  }
+  const request = async (): Promise<T> => {
+    const token = await getAuthToken();
+    if (token) {
+      headers = {
+        Authorization: `Bearer ${token}`,
+        ...headers,
+      };
+    }
+    const result = await fetch(`${API_URL}${url}`, {
+      ...init,
+      headers,
+    });
+    // if (result.status === 401) {
+    //   document.location.href = "/login";
+    // }
+    if (!result.ok) {
+      throw await result.json();
     }
 
-    throw error;
-  }
-);
+    try {
+      const data = (await result.json()) as Promise<T>;
+      return data;
+    } catch (error) {
+      if (result.status === 204 || result.status === 200) {
+        return "success" as any;
+      }
+    }
+    return Promise.reject(new Error("Unexpected API response"));
+  };
+  return request();
+};
 
-export { axiosClassic, axiosWithAuth };
+async function getAuthToken(): Promise<string | null> {
+  if (typeof window === "undefined") {
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    return cookieStore.get("accessToken")?.value || null;
+  }
+  const authCookie = Cookie.get("accessToken");
+  return authCookie ?? null;
+}
+
+const cleanParams = (params: Record<string, any>): Record<string, any> =>
+  Object.fromEntries(
+    Object.entries(params).filter(
+      ([_, value]) => value !== undefined && value !== null && value !== ""
+    )
+  );

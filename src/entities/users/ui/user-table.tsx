@@ -1,66 +1,38 @@
 "use client";
 
-import { useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
+  TableCaption,
 } from "@/shared/ui/table";
-import { Pencil, Trash2, UserPlus } from "lucide-react";
-import { Button } from "@/shared/ui/button";
+import { useEmployerListQuery } from "../api/useEmployerListQuery";
 import { UsersRow } from "@/widget";
 
-// Mock data for users
-const initialUsers = [
-  {
-    userId: "U001",
-    username: "Aman Amanow",
-    role: "Admin",
-    email: "amanow@example.com",
-  },
-  {
-    userId: "U002",
-    username: "Aman Amanow",
-    role: "Manager",
-    email: "amanow@example.com",
-  },
-  {
-    userId: "U003",
-    username: "Aman Amanow",
-    role: "User",
-    email: "amanow@example.com",
-  },
-  {
-    userId: "U004",
-    username: "Aman Amanow",
-    role: "HR",
-    email: "amanow@example.com",
-  },
-];
-
 export function UserManagementTable() {
-  const [users, setUsers] = useState(initialUsers);
+  const { list } = useEmployerListQuery({});
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Işçi ID</TableHead>
-          <TableHead>Ady</TableHead>
-          <TableHead>Wezipesi</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead className="text-right">Goşmaçalar</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {users.map((user) => (
-          <UsersRow key={user.userId} user={user} />
-        ))}
-      </TableBody>
-    </Table>
+    <div className="rounded-xl border shadow-sm overflow-x-auto">
+      <Table>
+        <TableCaption>Hasaba alnan işgärler sanawy</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-20 text-center">No</TableHead>
+            <TableHead>Ady</TableHead>
+            <TableHead>Wezipesi</TableHead>
+            <TableHead>Baglanyşykly Menejer</TableHead>
+            <TableHead className="text-right">Hereketler</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="overflow-y-auto">
+          {list?.map((user, index) => (
+            <UsersRow key={user.id} index={index + 1} user={user} />
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

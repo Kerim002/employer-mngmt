@@ -1,6 +1,6 @@
 type DepartmentUpdatePayload = {
-  id: string;
+  id?: string;
   managerId: string;
   name: string;
 };
-type DepartmentCreatePayload = Omit<DepartmentUpdatePayload, "id">;
+type DepartmentCreatePayload = DepartmentUpdatePayload;
